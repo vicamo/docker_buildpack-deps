@@ -49,7 +49,7 @@ endef
 
 # $(1): relative directory path, e.g. "jessie/amd64", "jessie/amd64/scm"
 define enumerate-build-dep-for-docker-build
-$(call enumerate-build-dep-for-docker-build-inner,$(call base-image-from-path,$(1))) $(foreach s,$(wildcard $(1)/*), $(call target-name-from-path,$(s)))
+$(call enumerate-build-dep-for-docker-build-inner,$(call base-image-from-path,$(1))) $(foreach s,$(filter-out %/skip,$(wildcard $(1)/*)), $(call target-name-from-path,$(s)))
 endef
 
 # $(1): suite
@@ -161,10 +161,7 @@ endef
 
 .PHONY: .travis.yml
 .travis.yml:
-	$(hide) travisEnv= ; \
-	$(foreach sa,$(sort $(SUITE_ARCH)),travisEnv+='\n  - VERSION='$(sa)); \
-	travis="$$(awk -v 'RS=\n\n' '$$1 == "env:" { $$0 = "env:'"$$travisEnv"'" } { printf "%s%s", $$0, RS }' $@)"; \
-	echo "$$travis" > $@
+	$(hide) ./update.sh
 
 all: .travis.yml
 	@echo "Build $(DOCKER_USER)/$(DOCKER_REPO) done"
