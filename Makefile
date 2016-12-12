@@ -161,10 +161,7 @@ endef
 
 .PHONY: .travis.yml
 .travis.yml:
-	$(hide) travisEnv= ; \
-	$(foreach sa,$(sort $(SUITE_ARCH)),travisEnv+='\n  - VERSION='$(sa)); \
-	travis="$$(awk -v 'RS=\n\n' '$$1 == "env:" { $$0 = "env:'"$$travisEnv"'" } { printf "%s%s", $$0, RS }' $@)"; \
-	echo "$$travis" > $@
+	$(hide) ./update.sh
 
 all: .travis.yml
 	@echo "Build $(DOCKER_USER)/$(DOCKER_REPO) done"
