@@ -49,7 +49,7 @@ endef
 
 # $(1): relative directory path, e.g. "jessie/amd64", "jessie/amd64/scm"
 define enumerate-build-dep-for-docker-build
-$(call enumerate-build-dep-for-docker-build-inner,$(call base-image-from-path,$(1))) $(foreach s,$(wildcard $(1)/*), $(call target-name-from-path,$(s)))
+$(call enumerate-build-dep-for-docker-build-inner,$(call base-image-from-path,$(1))) $(foreach s,$(filter-out %/skip,$(wildcard $(1)/*)), $(call target-name-from-path,$(s)))
 endef
 
 # $(1): suite
