@@ -1,5 +1,5 @@
 # GENERATED FROM Dockerfile.template
-FROM vicamo/buildpack-deps:sid-sparc-scm
+FROM vicamo/buildpack-deps:wheezy-s390x-scm
 
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \

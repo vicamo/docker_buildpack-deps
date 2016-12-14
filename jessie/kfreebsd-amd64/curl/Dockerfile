@@ -1,5 +1,5 @@
 # GENERATED FROM Dockerfile.template-curl
-FROM vicamo/debian:sid-sparc
+FROM vicamo/debian:jessie-kfreebsd-amd64
 
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \

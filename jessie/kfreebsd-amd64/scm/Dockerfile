@@ -1,5 +1,5 @@
 # GENERATED FROM Dockerfile.template-scm
-FROM vicamo/buildpack-deps:sid-sparc-curl
+FROM vicamo/buildpack-deps:jessie-kfreebsd-amd64-curl
 
 # procps is very common in build systems, and is a reasonably small package
 RUN apt-get update \

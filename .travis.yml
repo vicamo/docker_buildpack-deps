@@ -13,6 +13,8 @@ env:
   - VERSION=jessie/armel
   - VERSION=jessie/armhf
   - VERSION=jessie/i386
+  - VERSION=jessie/kfreebsd-amd64
+  - VERSION=jessie/kfreebsd-i386
   - VERSION=jessie/mips
   - VERSION=jessie/mipsel
   - VERSION=jessie/powerpc
@@ -35,7 +37,6 @@ env:
   - VERSION=sid/powerpc
   - VERSION=sid/ppc64el
   - VERSION=sid/s390x
-  - VERSION=sid/sparc
   - VERSION=stretch/amd64
   - VERSION=stretch/arm64
   - VERSION=stretch/armel
@@ -62,6 +63,7 @@ env:
   - VERSION=wheezy/mipsel
   - VERSION=wheezy/powerpc
   - VERSION=wheezy/s390
+  - VERSION=wheezy/s390x
   - VERSION=wheezy/sparc
   - VERSION=xenial/amd64
   - VERSION=xenial/arm64
@@ -79,6 +81,8 @@ env:
 matrix:
   fast_finish: true
   exclude:
+  - env: VERSION=jessie/kfreebsd-amd64
+  - env: VERSION=jessie/kfreebsd-i386
   - env: VERSION=sid/hurd-i386
   - env: VERSION=sid/kfreebsd-amd64
   - env: VERSION=sid/kfreebsd-i386
@@ -86,7 +90,6 @@ matrix:
   - env: VERSION=wheezy/kfreebsd-amd64
   - env: VERSION=wheezy/kfreebsd-i386
   allow_failures:
-  - env: VERSION=sid/sparc
   - env: VERSION=wheezy/s390
   - env: VERSION=wheezy/sparc
   - env: VERSION=xenial/s390x
