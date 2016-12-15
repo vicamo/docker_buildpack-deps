@@ -77,6 +77,12 @@ env:
   - VERSION=yakkety/i386
   - VERSION=yakkety/ppc64el
   - VERSION=yakkety/s390x
+  - VERSION=zesty/amd64
+  - VERSION=zesty/arm64
+  - VERSION=zesty/armhf
+  - VERSION=zesty/i386
+  - VERSION=zesty/ppc64el
+  - VERSION=zesty/s390x
 
 matrix:
   fast_finish: true
@@ -94,6 +100,7 @@ matrix:
   - env: VERSION=wheezy/sparc
   - env: VERSION=xenial/s390x
   - env: VERSION=yakkety/s390x
+  - env: VERSION=zesty/s390x
 
 branches:
   only:
