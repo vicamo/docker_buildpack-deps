@@ -6,7 +6,7 @@ services: docker
 env:
   global:
   - DOCKER_REPO=buildpack-deps
-  - secure: "Cp7x+H+xe7ZIBqVXw7ZRr8w0RcSOXdICyEh50n0llVW65k2HJiQNCcIej3IFaPhryPGglg86elsdOK2Pb0v0FriJ1l1kDlDYO0dMEe/hFcCOG/iOVoQO7ggsDxupebAskmKbNCfbGZRiL4ZLXIeGwXAe+Z0MVNoOqpvlvmpsysA="
+  - secure: "NPhsaHjSLbnI/YdKLxE6jIwoSflk8l8ppELVLC0lnPKOtv1ssr4w2IjNQhXscIzZMGNRecqH+6KDDZz+CRnqSKk3nRFIeaE2HiosRCjNt5pgA+s8FXMmV4O3L3E7O8TmwC7pu3A5B00nqGtHaLo3F3pCyXyZiZJkJVJpBkucX0k="
   matrix:
   - VERSION=jessie/amd64
   - VERSION=jessie/arm64
@@ -130,7 +130,7 @@ after_script:
 
 after_success:
 - if [ "$TRAVIS_PULL_REQUEST" == "false" -a -n "$(docker images | grep ${DOCKER_USER}/${DOCKER_REPO})" ]; then
-    docker login -u "${DOCKER_USER}" -p "${DOCKER_PASSWORD}";
+    docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}";
     for p in $(docker images | grep ${DOCKER_USER}/${DOCKER_REPO} | awk '{print $1":"$2}'); do
       docker push $p;
     done
