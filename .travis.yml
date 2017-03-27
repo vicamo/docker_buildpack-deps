@@ -34,7 +34,6 @@ env:
   - VERSION=sid/mips
   - VERSION=sid/mips64el
   - VERSION=sid/mipsel
-  - VERSION=sid/powerpc
   - VERSION=sid/ppc64el
   - VERSION=sid/s390x
   - VERSION=stretch/amd64
