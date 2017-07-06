@@ -20,9 +20,6 @@ env:
   - VERSION=jessie/powerpc
   - VERSION=jessie/ppc64el
   - VERSION=jessie/s390x
-  - VERSION=precise/amd64
-  - VERSION=precise/armhf
-  - VERSION=precise/i386
   - VERSION=sid/amd64
   - VERSION=sid/arm64
   - VERSION=sid/armel
