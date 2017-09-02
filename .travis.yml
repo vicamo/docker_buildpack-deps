@@ -20,9 +20,6 @@ env:
   - VERSION=jessie/powerpc
   - VERSION=jessie/ppc64el
   - VERSION=jessie/s390x
-  - VERSION=precise/amd64
-  - VERSION=precise/armhf
-  - VERSION=precise/i386
   - VERSION=sid/amd64
   - VERSION=sid/arm64
   - VERSION=sid/armel
@@ -121,7 +118,7 @@ before_script:
   - export image="${DOCKER_USER}/${DOCKER_REPO}:${VERSION%/*}-${VERSION#*/}"
 
 script:
-  - make NO_SKIP=1 DOCKER_USER=${DOCKER_USER} DOCKER_REPO=${DOCKER_REPO} "${VERSION%/*}-${VERSION#*/}"
+  - travis_retry make NO_SKIP=1 DOCKER_USER=${DOCKER_USER} DOCKER_REPO=${DOCKER_REPO} "${VERSION%/*}-${VERSION#*/}"
   - ~/official-images/test/run.sh "$image"
 
 after_script:
