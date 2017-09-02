@@ -14,7 +14,7 @@ DOCKER_USER ?= $(shell $(DOCKER) info | awk '/^Username:/ { print $$2 }')
 
 SUITE_ARCH :=
 
-DEBIAN_SUITES := wheezy jessie stretch sid
+DEBIAN_SUITES := wheezy jessie stretch buster sid
 UBUNTU_SUITES := trusty vivid xenial yakkety
 
 # $(1): relative directory path, e.g. "jessie/amd64"

@@ -6,6 +6,16 @@ env:
   - DOCKER_REPO=buildpack-deps
   - secure: "NPhsaHjSLbnI/YdKLxE6jIwoSflk8l8ppELVLC0lnPKOtv1ssr4w2IjNQhXscIzZMGNRecqH+6KDDZz+CRnqSKk3nRFIeaE2HiosRCjNt5pgA+s8FXMmV4O3L3E7O8TmwC7pu3A5B00nqGtHaLo3F3pCyXyZiZJkJVJpBkucX0k="
   matrix:
+  - VERSION=buster/amd64
+  - VERSION=buster/arm64
+  - VERSION=buster/armel
+  - VERSION=buster/armhf
+  - VERSION=buster/i386
+  - VERSION=buster/mips
+  - VERSION=buster/mips64el
+  - VERSION=buster/mipsel
+  - VERSION=buster/ppc64el
+  - VERSION=buster/s390x
   - VERSION=jessie/amd64
   - VERSION=jessie/arm64
   - VERSION=jessie/armel
