@@ -6,7 +6,7 @@ else
   hide := @
 endif
 
-LATEST := jessie
+LATEST := stretch
 
 DOCKER ?= docker
 DOCKER_REPO ?= buildpack-deps
