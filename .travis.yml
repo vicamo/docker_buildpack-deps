@@ -9,11 +9,9 @@ env:
   - VERSION=artful/amd64
   - VERSION=artful/arm64
   - VERSION=artful/armhf
-  - VERSION=artful/curl
   - VERSION=artful/i386
   - VERSION=artful/ppc64el
   - VERSION=artful/s390x
-  - VERSION=artful/scm
   - VERSION=buster/amd64
   - VERSION=buster/arm64
   - VERSION=buster/armel
@@ -83,12 +81,6 @@ env:
   - VERSION=xenial/i386
   - VERSION=xenial/ppc64el
   - VERSION=xenial/s390x
-  - VERSION=yakkety/amd64
-  - VERSION=yakkety/arm64
-  - VERSION=yakkety/armhf
-  - VERSION=yakkety/i386
-  - VERSION=yakkety/ppc64el
-  - VERSION=yakkety/s390x
   - VERSION=zesty/amd64
   - VERSION=zesty/arm64
   - VERSION=zesty/armhf
@@ -112,7 +104,6 @@ matrix:
   - env: VERSION=wheezy/s390
   - env: VERSION=wheezy/sparc
   - env: VERSION=xenial/s390x
-  - env: VERSION=yakkety/s390x
   - env: VERSION=zesty/s390x
 
 branches:
