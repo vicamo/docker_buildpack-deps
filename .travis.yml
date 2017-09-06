@@ -6,6 +6,14 @@ env:
   - DOCKER_REPO=buildpack-deps
   - secure: "NPhsaHjSLbnI/YdKLxE6jIwoSflk8l8ppELVLC0lnPKOtv1ssr4w2IjNQhXscIzZMGNRecqH+6KDDZz+CRnqSKk3nRFIeaE2HiosRCjNt5pgA+s8FXMmV4O3L3E7O8TmwC7pu3A5B00nqGtHaLo3F3pCyXyZiZJkJVJpBkucX0k="
   matrix:
+  - VERSION=artful/amd64
+  - VERSION=artful/arm64
+  - VERSION=artful/armhf
+  - VERSION=artful/curl
+  - VERSION=artful/i386
+  - VERSION=artful/ppc64el
+  - VERSION=artful/s390x
+  - VERSION=artful/scm
   - VERSION=buster/amd64
   - VERSION=buster/arm64
   - VERSION=buster/armel
@@ -100,6 +108,7 @@ matrix:
   - env: VERSION=wheezy/kfreebsd-amd64
   - env: VERSION=wheezy/kfreebsd-i386
   allow_failures:
+  - env: VERSION=artful/s390x
   - env: VERSION=wheezy/s390
   - env: VERSION=wheezy/sparc
   - env: VERSION=xenial/s390x
