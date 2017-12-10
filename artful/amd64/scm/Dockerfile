@@ -1,1 +1,1 @@
-FROM buildpack-deps:zesty-scm
+FROM buildpack-deps:artful-scm

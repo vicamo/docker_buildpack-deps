@@ -1,1 +1,1 @@
-FROM buildpack-deps:zesty
+FROM buildpack-deps:artful

@@ -1,1 +1,1 @@
-FROM buildpack-deps:zesty-curl
+FROM buildpack-deps:artful-curl
