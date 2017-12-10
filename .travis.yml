@@ -12,6 +12,12 @@ env:
   - VERSION=artful/i386
   - VERSION=artful/ppc64el
   - VERSION=artful/s390x
+  - VERSION=bionic/amd64
+  - VERSION=bionic/arm64
+  - VERSION=bionic/armhf
+  - VERSION=bionic/i386
+  - VERSION=bionic/ppc64el
+  - VERSION=bionic/s390x
   - VERSION=buster/amd64
   - VERSION=buster/arm64
   - VERSION=buster/armel
@@ -101,6 +107,7 @@ matrix:
   - env: VERSION=wheezy/kfreebsd-i386
   allow_failures:
   - env: VERSION=artful/s390x
+  - env: VERSION=bionic/s390x
   - env: VERSION=wheezy/s390
   - env: VERSION=wheezy/sparc
   - env: VERSION=xenial/s390x
