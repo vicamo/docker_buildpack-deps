@@ -101,9 +101,6 @@ matrix:
   - env: VERSION=wheezy/kfreebsd-i386
   allow_failures:
   - env: VERSION=artful/s390x
-  - env: VERSION=trusty/arm64
-  - env: VERSION=trusty/armhf
-  - env: VERSION=trusty/ppc64el
   - env: VERSION=wheezy/s390
   - env: VERSION=wheezy/sparc
   - env: VERSION=xenial/s390x
