@@ -141,4 +141,8 @@ after_success:
     done
   fi
 
+notifications:
+  slack:
+    secure: JwJkvYYD4Q3iQi0pq6GNh2Blf9LLUVfOkfWIeMmomXYJgXyKsLvspnZdC+d8iQqQMAgDUkWS+K1EXVy92mcL+9YcGStlekuVF7hJCZlSJno3hLvtSrruA65JBwBojMKOZNZ7vtNCcFN/lVeFqUabrDezCzCSRYV+uTyVrXuqEnE=
+
 # vim:set et ts=2 sw=2:
