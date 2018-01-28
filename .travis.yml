@@ -87,12 +87,6 @@ env:
   - VERSION=xenial/i386
   - VERSION=xenial/ppc64el
   - VERSION=xenial/s390x
-  - VERSION=zesty/amd64
-  - VERSION=zesty/arm64
-  - VERSION=zesty/armhf
-  - VERSION=zesty/i386
-  - VERSION=zesty/ppc64el
-  - VERSION=zesty/s390x
 
 matrix:
   fast_finish: true
@@ -111,7 +105,6 @@ matrix:
   - env: VERSION=wheezy/s390
   - env: VERSION=wheezy/sparc
   - env: VERSION=xenial/s390x
-  - env: VERSION=zesty/s390x
 
 branches:
   only:
