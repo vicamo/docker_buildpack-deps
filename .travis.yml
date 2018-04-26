@@ -119,7 +119,7 @@ before_script:
   - export image="${DOCKER_USER}/${DOCKER_REPO}:${VERSION%/*}-${VERSION#*/}"
 
 script:
-  - travis_retry make NO_SKIP=1 DOCKER_USER=${DOCKER_USER} DOCKER_REPO=${DOCKER_REPO} "${VERSION%/*}-${VERSION#*/}"
+  - travis_wait make NO_SKIP=1 DOCKER_USER=${DOCKER_USER} DOCKER_REPO=${DOCKER_REPO} "${VERSION%/*}-${VERSION#*/}"
   - ~/official-images/test/run.sh "$image"
 
 after_script:
