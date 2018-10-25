@@ -6,12 +6,6 @@ env:
   - DOCKER_REPO=buildpack-deps
   - secure: "NPhsaHjSLbnI/YdKLxE6jIwoSflk8l8ppELVLC0lnPKOtv1ssr4w2IjNQhXscIzZMGNRecqH+6KDDZz+CRnqSKk3nRFIeaE2HiosRCjNt5pgA+s8FXMmV4O3L3E7O8TmwC7pu3A5B00nqGtHaLo3F3pCyXyZiZJkJVJpBkucX0k="
   matrix:
-  - VERSION=artful/amd64
-  - VERSION=artful/arm64
-  - VERSION=artful/armhf
-  - VERSION=artful/i386
-  - VERSION=artful/ppc64el
-  - VERSION=artful/s390x
   - VERSION=bionic/amd64
   - VERSION=bionic/arm64
   - VERSION=bionic/armhf
@@ -118,7 +112,7 @@ install:
   - git clone https://github.com/docker-library/official-images.git ~/official-images
 
 before_script:
-  - docker run --rm --privileged vicamo/binfmt-qemu:latest
+  - docker run --rm --privileged vicamo/binfmt-qemu:bionic
   - cat /proc/sys/fs/binfmt_misc/qemu-*
   - env | sort
   - export image="${DOCKER_USER}/${DOCKER_REPO}:${VERSION%/*}-${VERSION#*/}"
