@@ -111,6 +111,7 @@ matrix:
   allow_failures:
   - env: VERSION=sid/alpha
   - env: VERSION=sid/hppa
+  - env: VERSION=sid/powerpcspe
   - env: VERSION=sid/sparc64
   - env: VERSION=sid/x32
   - env: VERSION=wheezy/s390
