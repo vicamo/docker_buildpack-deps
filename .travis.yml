@@ -109,6 +109,7 @@ matrix:
   - env: VERSION=wheezy/kfreebsd-amd64
   - env: VERSION=wheezy/kfreebsd-i386
   allow_failures:
+  - env: VERSION=sid/alpha
   - env: VERSION=sid/hppa
   - env: VERSION=sid/sparc64
   - env: VERSION=sid/x32
