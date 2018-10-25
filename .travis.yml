@@ -112,7 +112,7 @@ install:
   - git clone https://github.com/docker-library/official-images.git ~/official-images
 
 before_script:
-  - docker run --rm --privileged vicamo/binfmt-qemu:latest
+  - docker run --rm --privileged vicamo/binfmt-qemu:bionic
   - cat /proc/sys/fs/binfmt_misc/qemu-*
   - env | sort
   - export image="${DOCKER_USER}/${DOCKER_REPO}:${VERSION%/*}-${VERSION#*/}"
