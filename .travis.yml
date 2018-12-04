@@ -28,6 +28,12 @@ env:
   - VERSION=cosmic/i386
   - VERSION=cosmic/ppc64el
   - VERSION=cosmic/s390x
+  - VERSION=disco/amd64
+  - VERSION=disco/arm64
+  - VERSION=disco/armhf
+  - VERSION=disco/i386
+  - VERSION=disco/ppc64el
+  - VERSION=disco/s390x
   - VERSION=jessie/amd64
   - VERSION=jessie/arm64
   - VERSION=jessie/armel
