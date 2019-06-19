@@ -4,7 +4,7 @@ services: docker
 env:
   global:
   - DOCKER_REPO=buildpack-deps
-  - secure: "NPhsaHjSLbnI/YdKLxE6jIwoSflk8l8ppELVLC0lnPKOtv1ssr4w2IjNQhXscIzZMGNRecqH+6KDDZz+CRnqSKk3nRFIeaE2HiosRCjNt5pgA+s8FXMmV4O3L3E7O8TmwC7pu3A5B00nqGtHaLo3F3pCyXyZiZJkJVJpBkucX0k="
+  - secure: "SjQXOjC+vsiBmUz7GH/yBabXELEuwsHr+5V17JXHXIdte3ZVnPFoIdLGwfAq3TAPAvlTkwSqswlo6Z/4N5Akr4ouXv8nLvHbWlhtrf/gvyZqpj41JGZuik3wy+uEbaUrZX0/hzFvsT4aZ1r7wdTHnL9PubhX+uBalDcQ48IjUqg="
   matrix:
   - VERSION=bionic/amd64
   - VERSION=bionic/arm64
