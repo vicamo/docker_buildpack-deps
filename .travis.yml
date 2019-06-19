@@ -78,24 +78,6 @@ env:
   - VERSION=stretch/mipsel
   - VERSION=stretch/ppc64el
   - VERSION=stretch/s390x
-  - VERSION=trusty/amd64
-  - VERSION=trusty/arm64
-  - VERSION=trusty/armhf
-  - VERSION=trusty/i386
-  - VERSION=trusty/ppc64el
-  - VERSION=wheezy/amd64
-  - VERSION=wheezy/armel
-  - VERSION=wheezy/armhf
-  - VERSION=wheezy/i386
-  - VERSION=wheezy/ia64
-  - VERSION=wheezy/kfreebsd-amd64
-  - VERSION=wheezy/kfreebsd-i386
-  - VERSION=wheezy/mips
-  - VERSION=wheezy/mipsel
-  - VERSION=wheezy/powerpc
-  - VERSION=wheezy/s390
-  - VERSION=wheezy/s390x
-  - VERSION=wheezy/sparc
   - VERSION=xenial/amd64
   - VERSION=xenial/arm64
   - VERSION=xenial/armhf
@@ -111,17 +93,12 @@ matrix:
   - env: VERSION=sid/hurd-i386
   - env: VERSION=sid/kfreebsd-amd64
   - env: VERSION=sid/kfreebsd-i386
-  - env: VERSION=wheezy/ia64
-  - env: VERSION=wheezy/kfreebsd-amd64
-  - env: VERSION=wheezy/kfreebsd-i386
   allow_failures:
   - env: VERSION=sid/alpha
   - env: VERSION=sid/hppa
   - env: VERSION=sid/powerpcspe
   - env: VERSION=sid/sparc64
   - env: VERSION=sid/x32
-  - env: VERSION=wheezy/s390
-  - env: VERSION=wheezy/sparc
   - env: VERSION=xenial/s390x
 
 branches:
