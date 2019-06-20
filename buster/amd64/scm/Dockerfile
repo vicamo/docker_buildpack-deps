@@ -1,1 +1,1 @@
-FROM buildpack-deps:stretch-scm
+FROM buildpack-deps:buster-scm

@@ -14,18 +14,15 @@ ubuntu="$(curl -fsSL 'https://raw.githubusercontent.com/docker-library/official-
 
 travisEnv=
 for version in "${versions[@]}"; do
-	if echo "$debian" | grep -qE "\b${version%/*}\b"; then
+	suite=${version%/*}
+	arch=${version#*/}
+	if echo "$debian" | grep -qE "\b${suite}\b"; then
 		dist='debian'
-	elif echo "$ubuntu" | grep -qE "\b${version%/*}\b"; then
+	elif echo "$ubuntu" | grep -qE "\b${suite}\b"; then
 		dist='ubuntu'
 	else
 		echo >&2 "error: cannot determine repo for '$version'"
 		exit 1
-	fi
-
-	if ! grep -q '^# GENERATED' $version/Dockerfile; then
-		travisEnv+='\n  - VERSION='"$version"
-		continue
 	fi
 
 	echo "$version: $dist"
@@ -33,11 +30,20 @@ for version in "${versions[@]}"; do
 		src="Dockerfile${variant:+-$variant}.template"
 		trg="$version${variant:+/$variant}/Dockerfile"
 		mkdir -p "$(dirname "$trg")"
-		sed \
-			-e 's!DIST!'"$dist"'!g' \
-			-e 's!SUITE!'"${version%/*}"'!g' \
-			-e 's!ARCH!'"${version#*/}"'!g' \
-			"$src" > "$trg"
+		if ! grep -q '^# GENERATED' $version/Dockerfile; then
+			if [ "$arch" != "amd64" ]; then
+				echo >&2 "error: inherit generic repo from '$version'"
+				exit 1
+			fi
+			echo "FROM buildpack-deps:${suite}${variant:+-$variant}" > "$trg"
+		else
+			sed \
+				-e 's!DIST!'"$dist"'!g' \
+				-e 's!SUITE!'"${suite}"'!g' \
+				-e 's!ARCH!'"${arch}"'!g' \
+				"$src" > "$trg"
+		fi
+
 		if [ "$dist" = 'debian' ]; then
 			# remove "bzr" from buster and later
 			case "${version%/*}" in

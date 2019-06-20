@@ -1,1 +1,1 @@
-FROM buildpack-deps:stretch
+FROM buildpack-deps:buster

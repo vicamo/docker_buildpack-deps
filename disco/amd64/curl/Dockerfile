@@ -1,1 +1,1 @@
-FROM buildpack-deps:cosmic-curl
+FROM buildpack-deps:disco-curl

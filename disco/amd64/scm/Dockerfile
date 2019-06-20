@@ -1,1 +1,1 @@
-FROM buildpack-deps:cosmic-scm
+FROM buildpack-deps:disco-scm
