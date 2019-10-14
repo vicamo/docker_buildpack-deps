@@ -49,7 +49,6 @@ env:
   - VERSION=sid/kfreebsd-amd64
   - VERSION=sid/kfreebsd-i386
   - VERSION=sid/m68k
-  - VERSION=sid/mips
   - VERSION=sid/mips64el
   - VERSION=sid/mipsel
   - VERSION=sid/powerpc
