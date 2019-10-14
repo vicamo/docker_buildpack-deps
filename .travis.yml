@@ -35,17 +35,9 @@ env:
   - VERSION=disco/ppc64el
   - VERSION=disco/s390x
   - VERSION=jessie/amd64
-  - VERSION=jessie/arm64
   - VERSION=jessie/armel
   - VERSION=jessie/armhf
   - VERSION=jessie/i386
-  - VERSION=jessie/kfreebsd-amd64
-  - VERSION=jessie/kfreebsd-i386
-  - VERSION=jessie/mips
-  - VERSION=jessie/mipsel
-  - VERSION=jessie/powerpc
-  - VERSION=jessie/ppc64el
-  - VERSION=jessie/s390x
   - VERSION=sid/alpha
   - VERSION=sid/amd64
   - VERSION=sid/arm64
@@ -88,8 +80,6 @@ env:
 matrix:
   fast_finish: true
   exclude:
-  - env: VERSION=jessie/kfreebsd-amd64
-  - env: VERSION=jessie/kfreebsd-i386
   - env: VERSION=sid/hurd-i386
   - env: VERSION=sid/kfreebsd-amd64
   - env: VERSION=sid/kfreebsd-i386
