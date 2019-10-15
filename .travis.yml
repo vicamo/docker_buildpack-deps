@@ -34,6 +34,12 @@ env:
   - VERSION=disco/i386
   - VERSION=disco/ppc64el
   - VERSION=disco/s390x
+  - VERSION=eoan/amd64
+  - VERSION=eoan/arm64
+  - VERSION=eoan/armhf
+  - VERSION=eoan/i386
+  - VERSION=eoan/ppc64el
+  - VERSION=eoan/s390x
   - VERSION=jessie/amd64
   - VERSION=jessie/armel
   - VERSION=jessie/armhf
