@@ -1,1 +1,1 @@
-FROM buildpack-deps:stretch-curl
+FROM buildpack-deps:buster-curl
