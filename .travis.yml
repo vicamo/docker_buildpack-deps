@@ -12,6 +12,15 @@ env:
   - VERSION=bionic/i386
   - VERSION=bionic/ppc64el
   - VERSION=bionic/s390x
+  - VERSION=bullseye/amd64
+  - VERSION=bullseye/arm64
+  - VERSION=bullseye/armel
+  - VERSION=bullseye/armhf
+  - VERSION=bullseye/i386
+  - VERSION=bullseye/mips64el
+  - VERSION=bullseye/mipsel
+  - VERSION=bullseye/ppc64el
+  - VERSION=bullseye/s390x
   - VERSION=buster/amd64
   - VERSION=buster/arm64
   - VERSION=buster/armel
