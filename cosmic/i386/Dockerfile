@@ -19,7 +19,6 @@ RUN set -ex; \
 		libevent-dev \
 		libffi-dev \
 		libgdbm-dev \
-		libgeoip-dev \
 		libglib2.0-dev \
 		libgmp-dev \
 		libjpeg-dev \
@@ -27,6 +26,11 @@ RUN set -ex; \
 		liblzma-dev \
 		libmagickcore-dev \
 		libmagickwand-dev \
+		$(if [ -n "$(apt-cache search --names-only libmaxminddb-dev)" ]; then \
+				echo "libmaxminddb-dev"; \
+			else \
+				echo "libgeoip-dev"; \
+			fi) \
 		libncurses5-dev \
 		libncursesw5-dev \
 		libpng-dev \
