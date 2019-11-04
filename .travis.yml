@@ -1,3 +1,4 @@
+dist: bionic
 sudo: required
 services: docker
 
@@ -31,12 +32,12 @@ env:
   - VERSION=buster/mipsel
   - VERSION=buster/ppc64el
   - VERSION=buster/s390x
-  - VERSION=disco/amd64
-  - VERSION=disco/arm64
-  - VERSION=disco/armhf
-  - VERSION=disco/i386
-  - VERSION=disco/ppc64el
-  - VERSION=disco/s390x
+  - VERSION=disco/amd64 QEMU_SUITE=bionic
+  - VERSION=disco/arm64 QEMU_SUITE=bionic
+  - VERSION=disco/armhf QEMU_SUITE=bionic
+  - VERSION=disco/i386 QEMU_SUITE=bionic
+  - VERSION=disco/ppc64el QEMU_SUITE=bionic
+  - VERSION=disco/s390x QEMU_SUITE=bionic
   - VERSION=eoan/amd64
   - VERSION=eoan/arm64
   - VERSION=eoan/armhf
@@ -78,12 +79,12 @@ env:
   - VERSION=stretch/mipsel
   - VERSION=stretch/ppc64el
   - VERSION=stretch/s390x
-  - VERSION=xenial/amd64
-  - VERSION=xenial/arm64
-  - VERSION=xenial/armhf
-  - VERSION=xenial/i386
-  - VERSION=xenial/ppc64el
-  - VERSION=xenial/s390x
+  - VERSION=xenial/amd64 QEMU_SUITE=bionic
+  - VERSION=xenial/arm64 QEMU_SUITE=bionic
+  - VERSION=xenial/armhf QEMU_SUITE=bionic
+  - VERSION=xenial/i386 QEMU_SUITE=bionic
+  - VERSION=xenial/ppc64el QEMU_SUITE=bionic
+  - VERSION=xenial/s390x QEMU_SUITE=bionic
 
 matrix:
   fast_finish: true
@@ -101,7 +102,7 @@ matrix:
   - env: VERSION=sid/sh4
   - env: VERSION=sid/sparc64
   - env: VERSION=sid/x32
-  - env: VERSION=xenial/s390x
+  - env: VERSION=xenial/s390x QEMU_SUITE=bionic
 
 branches:
   only:
@@ -111,13 +112,15 @@ install:
   - git clone https://github.com/docker-library/official-images.git ~/official-images
 
 before_script:
-  - docker run --rm --privileged vicamo/binfmt-qemu:bionic
+  - export SUITE=${VERSION%/*}
+  - export ARCH=${VERSION#*/}
+  - docker run --rm --privileged vicamo/binfmt-qemu:${QEMU_SUITE:-${SUITE}}
   - cat /proc/sys/fs/binfmt_misc/qemu-*
   - env | sort
-  - export image="${DOCKER_USER}/${DOCKER_REPO}:${VERSION%/*}-${VERSION#*/}"
+  - export image="${DOCKER_USER}/${DOCKER_REPO}:${SUITE}-${ARCH}"
 
 script:
-  - travis_wait make NO_SKIP=1 DOCKER_USER=${DOCKER_USER} DOCKER_REPO=${DOCKER_REPO} "${VERSION%/*}-${VERSION#*/}"
+  - travis_wait make NO_SKIP=1 DOCKER_USER=${DOCKER_USER} DOCKER_REPO=${DOCKER_REPO} "${SUITE}-${ARCH}"
   - ~/official-images/test/run.sh "$image"
 
 after_script:
