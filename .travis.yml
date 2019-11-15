@@ -44,6 +44,12 @@ env:
   - VERSION=eoan/i386
   - VERSION=eoan/ppc64el
   - VERSION=eoan/s390x
+  - VERSION=focal/amd64
+  - VERSION=focal/arm64
+  - VERSION=focal/armhf
+  - VERSION=focal/i386
+  - VERSION=focal/ppc64el
+  - VERSION=focal/s390x
   - VERSION=jessie/amd64
   - VERSION=jessie/armel
   - VERSION=jessie/armhf
