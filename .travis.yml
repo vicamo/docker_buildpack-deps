@@ -99,10 +99,15 @@ matrix:
   - env: VERSION=sid/kfreebsd-amd64
   - env: VERSION=sid/kfreebsd-i386
   allow_failures:
+  # https://github.com/vicamo/docker_buildpack-deps/issues/36
   - env: VERSION=sid/alpha
+  # https://github.com/vicamo/docker_buildpack-deps/issues/47
   - env: VERSION=sid/hppa
+  # https://github.com/vicamo/docker_buildpack-deps/issues/37
   - env: VERSION=sid/powerpcspe
+  # https://github.com/vicamo/docker_buildpack-deps/issues/48
   - env: VERSION=sid/sparc64
+  # https://github.com/vicamo/docker_buildpack-deps/issues/7
   - env: VERSION=xenial/s390x QEMU_SUITE=bionic
   # https://github.com/vicamo/docker_buildpack-deps/issues/46
   - env: VERSION=focal/s390x
