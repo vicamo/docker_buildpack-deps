@@ -109,6 +109,8 @@ matrix:
   - env: VERSION=sid/sparc64
   - env: VERSION=sid/x32
   - env: VERSION=xenial/s390x QEMU_SUITE=bionic
+  # https://github.com/vicamo/docker_buildpack-deps/issues/46
+  - env: VERSION=focal/s390x
 
 branches:
   only:
