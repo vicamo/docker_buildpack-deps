@@ -44,6 +44,12 @@ env:
   - VERSION=eoan/i386
   - VERSION=eoan/ppc64el
   - VERSION=eoan/s390x
+  - VERSION=focal/amd64
+  - VERSION=focal/arm64
+  - VERSION=focal/armhf
+  - VERSION=focal/i386
+  - VERSION=focal/ppc64el
+  - VERSION=focal/s390x
   - VERSION=jessie/amd64
   - VERSION=jessie/armel
   - VERSION=jessie/armhf
@@ -93,16 +99,18 @@ matrix:
   - env: VERSION=sid/kfreebsd-amd64
   - env: VERSION=sid/kfreebsd-i386
   allow_failures:
+  # https://github.com/vicamo/docker_buildpack-deps/issues/36
   - env: VERSION=sid/alpha
+  # https://github.com/vicamo/docker_buildpack-deps/issues/47
   - env: VERSION=sid/hppa
-  - env: VERSION=sid/m68k
-  - env: VERSION=sid/powerpc
+  # https://github.com/vicamo/docker_buildpack-deps/issues/37
   - env: VERSION=sid/powerpcspe
-  - env: VERSION=sid/ppc64
-  - env: VERSION=sid/sh4
+  # https://github.com/vicamo/docker_buildpack-deps/issues/48
   - env: VERSION=sid/sparc64
-  - env: VERSION=sid/x32
+  # https://github.com/vicamo/docker_buildpack-deps/issues/7
   - env: VERSION=xenial/s390x QEMU_SUITE=bionic
+  # https://github.com/vicamo/docker_buildpack-deps/issues/46
+  - env: VERSION=focal/s390x
 
 branches:
   only:
