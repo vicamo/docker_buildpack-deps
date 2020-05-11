@@ -44,6 +44,11 @@ env:
   - VERSION=focal/i386
   - VERSION=focal/ppc64el
   - VERSION=focal/s390x
+  - VERSION=groovy/amd64
+  - VERSION=groovy/arm64
+  - VERSION=groovy/armhf
+  - VERSION=groovy/ppc64el
+  - VERSION=groovy/s390x
   - VERSION=jessie/amd64
   - VERSION=jessie/armel
   - VERSION=jessie/armhf
