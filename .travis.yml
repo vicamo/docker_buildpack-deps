@@ -41,7 +41,6 @@ env:
   - VERSION=focal/amd64
   - VERSION=focal/arm64
   - VERSION=focal/armhf
-  - VERSION=focal/i386
   - VERSION=focal/ppc64el
   - VERSION=focal/s390x
   - VERSION=groovy/amd64
