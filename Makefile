@@ -12,32 +12,32 @@ DOCKER ?= docker
 DOCKER_REPO ?= buildpack-deps
 DOCKER_USER ?= $(shell $(DOCKER) info | awk '/^Username:/ { print $$2 }')
 
-SUITE_ARCH :=
-
-DEBIAN_SUITES := wheezy jessie stretch buster sid
-UBUNTU_SUITES := trusty vivid xenial yakkety
-
-# $(1): relative directory path, e.g. "jessie/amd64"
+# $(1): relative directory path, e.g. "debian/jessie/amd64"
 define target-name-from-path
-$(subst /,-,$(1))
+$(subst /,-,$(patsubst $(call distro-name-from-path,$(1))/%,%,$(1)))
 endef
 
-# $(1): relative directory path, e.g. "jessie/amd64"
-define suite-name-from-path
+# $(1): relative directory path, e.g. "debian/jessie/amd64"
+define distro-name-from-path
 $(word 1,$(subst /, ,$(1)))
 endef
 
-# $(1): relative directory path, e.g. "jessie/amd64"
-define arch-name-from-path
+# $(1): relative directory path, e.g. "debian/jessie/amd64"
+define suite-name-from-path
 $(word 2,$(subst /, ,$(1)))
 endef
 
-# $(1): relative directory path, e.g. "jessie/amd64/curl"
-define func-name-from-path
+# $(1): relative directory path, e.g. "debian/jessie/amd64"
+define arch-name-from-path
 $(word 3,$(subst /, ,$(1)))
 endef
 
-# $(1): relative directory path, e.g. "jessie/amd64"
+# $(1): relative directory path, e.g. "debian/jessie/amd64/curl"
+define func-name-from-path
+$(word 4,$(subst /, ,$(1)))
+endef
+
+# $(1): relative directory path, e.g. "debian/jessie/amd64"
 define base-image-from-path
 $(shell cat $(1)/Dockerfile | grep ^FROM | awk '{print $$2}')
 endef
@@ -47,7 +47,7 @@ define enumerate-build-dep-for-docker-build-inner
 $(if $(filter $(DOCKER_USER)/$(DOCKER_REPO):%,$(1)),$(patsubst $(DOCKER_USER)/$(DOCKER_REPO):%,%,$(1)))
 endef
 
-# $(1): relative directory path, e.g. "jessie/amd64", "jessie/amd64/scm"
+# $(1): relative directory path, e.g. "debian/jessie/amd64", "debian/jessie/amd64/scm"
 define enumerate-build-dep-for-docker-build
 $(call enumerate-build-dep-for-docker-build-inner,$(call base-image-from-path,$(1))) $(foreach s,$(filter-out %/skip,$(wildcard $(1)/*)), $(call target-name-from-path,$(s)))
 endef
@@ -68,16 +68,17 @@ else \
 fi
 endef
 
-# $(1): relative directory path, e.g. "jessie/amd64", "jessie/amd64/scm"
+# $(1): relative directory path, e.g. "debian/jessie/amd64", "debian/jessie/amd64/scm"
 # $(2): target name, e.g. jessie-amd64-scm
-# $(3): suite name, e.g. jessie
-# $(4): arch name, e.g. amd64
-# $(5): func name, e.g. scm
+# $(3): distro name, e.g. debian
+# $(4): suite name, e.g. jessie
+# $(5): arch name, e.g. amd64
+# $(6): func name, e.g. scm
 define define-dockerfile-target
-$(1)/Dockerfile: PRIVATE_DIST := $(if $(filter $(DEBIAN_SUITES),$(3)),debian,ubuntu)
-$(1)/Dockerfile: PRIVATE_SUITE := $(3)
-$(1)/Dockerfile: PRIVATE_ARCH := $(4)
-$(1)/Dockerfile: Dockerfile$(if $(5),-$(5)).template
+$(1)/Dockerfile: PRIVATE_DIST := $(3)
+$(1)/Dockerfile: PRIVATE_SUITE := $(4)
+$(1)/Dockerfile: PRIVATE_ARCH := $(5)
+$(1)/Dockerfile: Dockerfile$(if $(6),-$(6)).template
 	$$(call do-dockerfile)
 
 .PHONY: $(call target-name-from-path,$(1)/Dockerfile)
@@ -93,11 +94,8 @@ fi
 
 endef
 
-# $(1): relative directory path, e.g. "jessie/amd64", "jessie/amd64/scm"
+# $(1): relative directory path, e.g. "debian/jessie/amd64", "debian/jessie/amd64/scm"
 # $(2): target name, e.g. jessie-amd64-scm
-# $(3): suite name, e.g. jessie
-# $(4): arch name, e.g. amd64
-# $(5): func name, e.g. scm
 define define-docker-build-target
 .PHONY: docker-build-$(2)
 $(2): docker-build-$(2)
@@ -117,7 +115,7 @@ done
 
 endef
 
-# $(1): relative directory path, e.g. "jessie/amd64", "jessie/amd64/scm"
+# $(1): relative directory path, e.g. "debian/jessie/amd64", "debian/jessie/amd64/scm"
 # $(2): target name, e.g. jessie-amd64-scm
 # $(3): suite name, e.g. jessie
 # $(4): arch name, e.g. amd64
@@ -133,9 +131,10 @@ docker-tag-$(2): docker-build-$(2)
 
 endef
 
-# $(1): relative directory path, e.g. "jessie/amd64", "jessie/amd64/scm"
+# $(1): relative directory path, e.g. "debian/jessie/amd64", "debian/jessie/amd64/scm"
 define define-target-from-path
 $(eval target := $(call target-name-from-path,$(1)))
+$(eval distro := $(call distro-name-from-path,$(1)))
 $(eval suite := $(call suite-name-from-path,$(1)))
 $(eval arch := $(call arch-name-from-path,$(1)))
 $(eval func := $(call func-name-from-path,$(1)))
@@ -145,15 +144,14 @@ $(target):
 	@echo "$$@ done"
 
 dockerfiles: $(1)/Dockerfile
-$(call define-dockerfile-target,$(1),$(target),$(suite),$(arch),$(func))
+$(call define-dockerfile-target,$(1),$(target),$(distro),$(suite),$(arch),$(func))
 
 $(if $(if $(NO_SKIP),,$(wildcard $(1)/skip)), \
   $(info Skipping $(1): $(shell cat $(1)/skip)) \
   , \
-  $(eval SUITE_ARCH += $(suite)/$(arch)) \
-  $(eval .PHONY: $(suite) $(arch) $(func)) \
-  $(eval all $(suite) $(arch) $(func): $(target)) \
-  $(call define-docker-build-target,$(1),$(target),$(suite),$(arch),$(func)) \
+  $(eval .PHONY: $(distro) $(suite) $(arch) $(func)) \
+  $(eval all $(distro) $(suite) $(arch) $(func): $(target)) \
+  $(call define-docker-build-target,$(1),$(target)) \
   $(if $(strip $(call enumerate-additional-tags-for,$(suite),$(arch),$(func))), \
     $(call define-docker-tag-target,$(1),$(target),$(suite),$(arch),$(func))) \
 )
@@ -170,7 +168,3 @@ $(foreach f,$(shell find . -type f -name Dockerfile | cut -d/ -f2-), \
   $(eval path := $(patsubst %/Dockerfile,%,$(f))) \
   $(eval $(call define-target-from-path,$(path))) \
 )
-
-.PHONY: debian ubuntu
-debian: $(DEBIAN_SUITES)
-ubuntu: $(UBUNTU_SUITES)
