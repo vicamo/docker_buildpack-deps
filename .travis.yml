@@ -41,7 +41,6 @@ env:
   - VERSION=focal/amd64
   - VERSION=focal/arm64
   - VERSION=focal/armhf
-  - VERSION=focal/i386
   - VERSION=focal/ppc64el
   - VERSION=focal/s390x
   - VERSION=groovy/amd64
@@ -106,6 +105,8 @@ matrix:
   - env: VERSION=sid/powerpcspe
   # https://github.com/vicamo/docker_buildpack-deps/issues/48
   - env: VERSION=sid/sparc64
+  # https://github.com/vicamo/docker_buildpack-deps/issues/51
+  - env: VERSION=sid/x32
   # https://github.com/vicamo/docker_buildpack-deps/issues/7
   - env: VERSION=xenial/s390x QEMU_SUITE=bionic
   # https://github.com/vicamo/docker_buildpack-deps/issues/46
