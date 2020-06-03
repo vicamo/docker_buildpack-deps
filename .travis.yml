@@ -7,110 +7,110 @@ env:
   - DOCKER_REPO=buildpack-deps
   - secure: "SjQXOjC+vsiBmUz7GH/yBabXELEuwsHr+5V17JXHXIdte3ZVnPFoIdLGwfAq3TAPAvlTkwSqswlo6Z/4N5Akr4ouXv8nLvHbWlhtrf/gvyZqpj41JGZuik3wy+uEbaUrZX0/hzFvsT4aZ1r7wdTHnL9PubhX+uBalDcQ48IjUqg="
   matrix:
-  - VERSION=bionic/amd64
-  - VERSION=bionic/arm64
-  - VERSION=bionic/armhf
-  - VERSION=bionic/i386
-  - VERSION=bionic/ppc64el
-  - VERSION=bionic/s390x
-  - VERSION=bullseye/amd64
-  - VERSION=bullseye/arm64
-  - VERSION=bullseye/armel
-  - VERSION=bullseye/armhf
-  - VERSION=bullseye/i386
-  - VERSION=bullseye/mips64el
-  - VERSION=bullseye/mipsel
-  - VERSION=bullseye/ppc64el
-  - VERSION=bullseye/s390x
-  - VERSION=buster/amd64
-  - VERSION=buster/arm64
-  - VERSION=buster/armel
-  - VERSION=buster/armhf
-  - VERSION=buster/i386
-  - VERSION=buster/mips
-  - VERSION=buster/mips64el
-  - VERSION=buster/mipsel
-  - VERSION=buster/ppc64el
-  - VERSION=buster/s390x
-  - VERSION=eoan/amd64
-  - VERSION=eoan/arm64
-  - VERSION=eoan/armhf
-  - VERSION=eoan/i386
-  - VERSION=eoan/ppc64el
-  - VERSION=eoan/s390x
-  - VERSION=focal/amd64
-  - VERSION=focal/arm64
-  - VERSION=focal/armhf
-  - VERSION=focal/ppc64el
-  - VERSION=focal/s390x
-  - VERSION=groovy/amd64
-  - VERSION=groovy/arm64
-  - VERSION=groovy/armhf
-  - VERSION=groovy/ppc64el
-  - VERSION=groovy/s390x
-  - VERSION=jessie/amd64
-  - VERSION=jessie/armel
-  - VERSION=jessie/armhf
-  - VERSION=jessie/i386
-  - VERSION=sid/alpha
-  - VERSION=sid/amd64
-  - VERSION=sid/arm64
-  - VERSION=sid/armel
-  - VERSION=sid/armhf
-  - VERSION=sid/hppa
-  - VERSION=sid/hurd-i386
-  - VERSION=sid/i386
-  - VERSION=sid/kfreebsd-amd64
-  - VERSION=sid/kfreebsd-i386
-  - VERSION=sid/m68k
-  - VERSION=sid/mips64el
-  - VERSION=sid/mipsel
-  - VERSION=sid/powerpc
-  - VERSION=sid/powerpcspe
-  - VERSION=sid/ppc64
-  - VERSION=sid/ppc64el
-  - VERSION=sid/s390x
-  - VERSION=sid/sh4
-  - VERSION=sid/sparc64
-  - VERSION=sid/x32
-  - VERSION=stretch/amd64
-  - VERSION=stretch/arm64
-  - VERSION=stretch/armel
-  - VERSION=stretch/armhf
-  - VERSION=stretch/i386
-  - VERSION=stretch/mips
-  - VERSION=stretch/mips64el
-  - VERSION=stretch/mipsel
-  - VERSION=stretch/ppc64el
-  - VERSION=stretch/s390x
-  - VERSION=xenial/amd64 QEMU_SUITE=bionic
-  - VERSION=xenial/arm64 QEMU_SUITE=bionic
-  - VERSION=xenial/armhf QEMU_SUITE=bionic
-  - VERSION=xenial/i386 QEMU_SUITE=bionic
-  - VERSION=xenial/ppc64el QEMU_SUITE=bionic
-  - VERSION=xenial/s390x QEMU_SUITE=bionic
+  - VERSION=debian/bullseye/amd64
+  - VERSION=debian/bullseye/arm64
+  - VERSION=debian/bullseye/armel
+  - VERSION=debian/bullseye/armhf
+  - VERSION=debian/bullseye/i386
+  - VERSION=debian/bullseye/mips64el
+  - VERSION=debian/bullseye/mipsel
+  - VERSION=debian/bullseye/ppc64el
+  - VERSION=debian/bullseye/s390x
+  - VERSION=debian/buster/amd64
+  - VERSION=debian/buster/arm64
+  - VERSION=debian/buster/armel
+  - VERSION=debian/buster/armhf
+  - VERSION=debian/buster/i386
+  - VERSION=debian/buster/mips
+  - VERSION=debian/buster/mips64el
+  - VERSION=debian/buster/mipsel
+  - VERSION=debian/buster/ppc64el
+  - VERSION=debian/buster/s390x
+  - VERSION=debian/jessie/amd64
+  - VERSION=debian/jessie/armel
+  - VERSION=debian/jessie/armhf
+  - VERSION=debian/jessie/i386
+  - VERSION=debian/sid/alpha
+  - VERSION=debian/sid/amd64
+  - VERSION=debian/sid/arm64
+  - VERSION=debian/sid/armel
+  - VERSION=debian/sid/armhf
+  - VERSION=debian/sid/hppa
+  - VERSION=debian/sid/hurd-i386
+  - VERSION=debian/sid/i386
+  - VERSION=debian/sid/kfreebsd-amd64
+  - VERSION=debian/sid/kfreebsd-i386
+  - VERSION=debian/sid/m68k
+  - VERSION=debian/sid/mips64el
+  - VERSION=debian/sid/mipsel
+  - VERSION=debian/sid/powerpc
+  - VERSION=debian/sid/powerpcspe
+  - VERSION=debian/sid/ppc64
+  - VERSION=debian/sid/ppc64el
+  - VERSION=debian/sid/s390x
+  - VERSION=debian/sid/sh4
+  - VERSION=debian/sid/sparc64
+  - VERSION=debian/sid/x32
+  - VERSION=debian/stretch/amd64
+  - VERSION=debian/stretch/arm64
+  - VERSION=debian/stretch/armel
+  - VERSION=debian/stretch/armhf
+  - VERSION=debian/stretch/i386
+  - VERSION=debian/stretch/mips
+  - VERSION=debian/stretch/mips64el
+  - VERSION=debian/stretch/mipsel
+  - VERSION=debian/stretch/ppc64el
+  - VERSION=debian/stretch/s390x
+  - VERSION=ubuntu/bionic/amd64
+  - VERSION=ubuntu/bionic/arm64
+  - VERSION=ubuntu/bionic/armhf
+  - VERSION=ubuntu/bionic/i386
+  - VERSION=ubuntu/bionic/ppc64el
+  - VERSION=ubuntu/bionic/s390x
+  - VERSION=ubuntu/eoan/amd64
+  - VERSION=ubuntu/eoan/arm64
+  - VERSION=ubuntu/eoan/armhf
+  - VERSION=ubuntu/eoan/i386
+  - VERSION=ubuntu/eoan/ppc64el
+  - VERSION=ubuntu/eoan/s390x
+  - VERSION=ubuntu/focal/amd64
+  - VERSION=ubuntu/focal/arm64
+  - VERSION=ubuntu/focal/armhf
+  - VERSION=ubuntu/focal/ppc64el
+  - VERSION=ubuntu/focal/s390x
+  - VERSION=ubuntu/groovy/amd64
+  - VERSION=ubuntu/groovy/arm64
+  - VERSION=ubuntu/groovy/armhf
+  - VERSION=ubuntu/groovy/ppc64el
+  - VERSION=ubuntu/groovy/s390x
+  - VERSION=ubuntu/xenial/amd64 QEMU_SUITE=bionic
+  - VERSION=ubuntu/xenial/arm64 QEMU_SUITE=bionic
+  - VERSION=ubuntu/xenial/armhf QEMU_SUITE=bionic
+  - VERSION=ubuntu/xenial/i386 QEMU_SUITE=bionic
+  - VERSION=ubuntu/xenial/ppc64el QEMU_SUITE=bionic
+  - VERSION=ubuntu/xenial/s390x QEMU_SUITE=bionic
 
 matrix:
   fast_finish: true
   exclude:
-  - env: VERSION=sid/hurd-i386
-  - env: VERSION=sid/kfreebsd-amd64
-  - env: VERSION=sid/kfreebsd-i386
+  - env: VERSION=debian/sid/hurd-i386
+  - env: VERSION=debian/sid/kfreebsd-amd64
+  - env: VERSION=debian/sid/kfreebsd-i386
   allow_failures:
   # https://github.com/vicamo/docker_buildpack-deps/issues/36
-  - env: VERSION=sid/alpha
+  - env: VERSION=debian/sid/alpha
   # https://github.com/vicamo/docker_buildpack-deps/issues/47
-  - env: VERSION=sid/hppa
+  - env: VERSION=debian/sid/hppa
   # https://github.com/vicamo/docker_buildpack-deps/issues/37
-  - env: VERSION=sid/powerpcspe
+  - env: VERSION=debian/sid/powerpcspe
   # https://github.com/vicamo/docker_buildpack-deps/issues/48
-  - env: VERSION=sid/sparc64
+  - env: VERSION=debian/sid/sparc64
   # https://github.com/vicamo/docker_buildpack-deps/issues/51
-  - env: VERSION=sid/x32
+  - env: VERSION=debian/sid/x32
   # https://github.com/vicamo/docker_buildpack-deps/issues/7
-  - env: VERSION=xenial/s390x QEMU_SUITE=bionic
+  - env: VERSION=ubuntu/xenial/s390x QEMU_SUITE=bionic
   # https://github.com/vicamo/docker_buildpack-deps/issues/46
-  - env: VERSION=focal/s390x
+  - env: VERSION=ubuntu/focal/s390x
 
 branches:
   only:
@@ -120,8 +120,10 @@ install:
   - git clone https://github.com/docker-library/official-images.git ~/official-images
 
 before_script:
-  - export SUITE=${VERSION%/*}
-  - export ARCH=${VERSION#*/}
+  - export DISTRO=${VERSION%/*}
+  - export SUITE=${DISTRO#*/}
+  - export DISTRO=${DISTRO%/*}
+  - export ARCH=${VERSION##*/}
   - docker run --rm --privileged vicamo/binfmt-qemu:${QEMU_SUITE:-${SUITE}}
   - cat /proc/sys/fs/binfmt_misc/qemu-*
   - env | sort

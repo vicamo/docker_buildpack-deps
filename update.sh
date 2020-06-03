@@ -5,27 +5,17 @@ cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
 versions=( "$@" )
 if [ ${#versions[@]} -eq 0 ]; then
-	versions=( */*/ )
+	versions=( */*/*/ )
 fi
 versions=( "${versions[@]%/}" )
-
-debian="$(curl -fsSL 'https://raw.githubusercontent.com/docker-library/official-images/master/library/debian')"
-ubuntu="$(curl -fsSL 'https://raw.githubusercontent.com/docker-library/official-images/master/library/ubuntu')"
 
 travisEnv=
 for version in "${versions[@]}"; do
 	suite=${version%/*}
-	arch=${version#*/}
-	if echo "$debian" | grep -qE "\b${suite}\b"; then
-		dist='debian'
-	elif echo "$ubuntu" | grep -qE "\b${suite}\b"; then
-		dist='ubuntu'
-	else
-		echo >&2 "error: cannot determine repo for '$version'"
-		exit 1
-	fi
-
-	echo "$version: $dist"
+	dist=${suite%/*}
+	suite=${suite#*/}
+	arch=${version##*/}
+	echo "$version"
 	for variant in curl scm ''; do
 		src="Dockerfile${variant:+-$variant}.template"
 		trg="$version${variant:+/$variant}/Dockerfile"
@@ -46,7 +36,7 @@ for version in "${versions[@]}"; do
 
 		if [ "$dist" = 'debian' ]; then
 			# remove "bzr" from buster and later
-			case "${version%/*}" in
+			case "$suite" in
 				jessie|stretch) echo ' - how bizarre (still includes "bzr")' ;;
 				*)
 					sed -i '/bzr/d' "$version/scm/Dockerfile"
