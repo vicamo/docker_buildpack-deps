@@ -99,8 +99,6 @@ matrix:
   allow_failures:
   # https://github.com/vicamo/docker_buildpack-deps/issues/36
   - env: VERSION=debian/sid/alpha
-  # https://github.com/vicamo/docker_buildpack-deps/issues/47
-  - env: VERSION=debian/sid/hppa
   # https://github.com/vicamo/docker_buildpack-deps/issues/37
   - env: VERSION=debian/sid/powerpcspe
   # https://github.com/vicamo/docker_buildpack-deps/issues/48
@@ -109,8 +107,11 @@ matrix:
   - env: VERSION=debian/sid/x32
   # https://github.com/vicamo/docker_buildpack-deps/issues/7
   - env: VERSION=ubuntu/xenial/s390x QEMU_SUITE=bionic
-  # https://github.com/vicamo/docker_buildpack-deps/issues/46
-  - env: VERSION=ubuntu/focal/s390x
+  # https://github.com/vicamo/docker_buildpack-deps/issues/54
+  - env: VERSION=debian/sid/i386
+  - env: VERSION=debian/bullseye/i386
+  # https://github.com/vicamo/docker_buildpack-deps/issues/55
+  - env: VERSION=debian/sid/ppc64
 
 branches:
   only:
