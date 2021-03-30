@@ -151,38 +151,6 @@
       ""
     ]
   },
-  "debian/jessie/amd64": {
-    "suite": "oldoldstable",
-    "variants": [
-      "curl",
-      "scm",
-      ""
-    ]
-  },
-  "debian/jessie/armel": {
-    "suite": "oldoldstable",
-    "variants": [
-      "curl",
-      "scm",
-      ""
-    ]
-  },
-  "debian/jessie/armhf": {
-    "suite": "oldoldstable",
-    "variants": [
-      "curl",
-      "scm",
-      ""
-    ]
-  },
-  "debian/jessie/i386": {
-    "suite": "oldoldstable",
-    "variants": [
-      "curl",
-      "scm",
-      ""
-    ]
-  },
   "debian/sid/alpha": {
     "suite": "unstable",
     "variants": [
