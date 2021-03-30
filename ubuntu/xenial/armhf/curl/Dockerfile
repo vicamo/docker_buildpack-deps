@@ -9,6 +9,7 @@ FROM vicamo/ubuntu:xenial-armhf
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
+		apt-transport-https \
 		ca-certificates \
 		curl \
 		netbase \

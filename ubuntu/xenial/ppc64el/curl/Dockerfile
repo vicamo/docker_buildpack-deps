@@ -9,6 +9,7 @@ FROM vicamo/ubuntu:xenial-ppc64el
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
+		apt-transport-https \
 		ca-certificates \
 		curl \
 		netbase \

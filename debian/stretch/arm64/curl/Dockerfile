@@ -9,6 +9,7 @@ FROM vicamo/debian:stretch-arm64
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
+		apt-transport-https \
 		ca-certificates \
 		curl \
 		netbase \

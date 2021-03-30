@@ -9,6 +9,7 @@ FROM vicamo/debian:stretch-mips64el
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
+		apt-transport-https \
 		ca-certificates \
 		curl \
 		netbase \
