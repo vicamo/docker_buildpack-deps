@@ -1,4 +1,9 @@
-# GENERATED FROM Dockerfile.template
+#
+# NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
+#
+# PLEASE DO NOT EDIT IT DIRECTLY.
+#
+
 FROM vicamo/buildpack-deps:focal-ppc64el-scm
 
 RUN set -ex; \

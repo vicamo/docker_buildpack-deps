@@ -1,8 +1,6 @@
-# GENERATED FROM Dockerfile.template-curl
-FROM vicamo/DIST:SUITE-ARCH
+FROM vicamo/{{ env.dist }}:{{ env.codename }}-{{ env.arch }}
 
-RUN apt-get update \
-	&& apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 		ca-certificates \
 		curl \
 		netbase \
