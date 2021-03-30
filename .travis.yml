@@ -73,6 +73,11 @@ env:
   - VERSION=ubuntu/groovy/armhf
   - VERSION=ubuntu/groovy/ppc64el
   - VERSION=ubuntu/groovy/s390x
+  - VERSION=ubuntu/hirsute/amd64
+  - VERSION=ubuntu/hirsute/arm64
+  - VERSION=ubuntu/hirsute/armhf
+  - VERSION=ubuntu/hirsute/ppc64el
+  - VERSION=ubuntu/hirsute/s390x
   - VERSION=ubuntu/xenial/amd64 QEMU_SUITE=bionic
   - VERSION=ubuntu/xenial/arm64 QEMU_SUITE=bionic
   - VERSION=ubuntu/xenial/armhf QEMU_SUITE=bionic

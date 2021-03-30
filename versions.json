@@ -527,6 +527,46 @@
       ""
     ]
   },
+  "ubuntu/hirsute/amd64": {
+    "suite": "21.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/hirsute/arm64": {
+    "suite": "21.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/hirsute/armhf": {
+    "suite": "21.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/hirsute/ppc64el": {
+    "suite": "21.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/hirsute/s390x": {
+    "suite": "21.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
   "ubuntu/xenial/amd64": {
     "suite": "16.04",
     "variants": [
