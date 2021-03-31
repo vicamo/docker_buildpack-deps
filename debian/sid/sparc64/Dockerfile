@@ -1,10 +1,13 @@
-# GENERATED FROM Dockerfile.template
+#
+# NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
+#
+# PLEASE DO NOT EDIT IT DIRECTLY.
+#
+
 FROM vicamo/buildpack-deps:sid-sparc64-scm
 
 RUN set -ex; \
 	apt-get update; \
-# make sure debconf doesn't try to prompt (e.g. tzdata on Ubuntu)
-	DEBIAN_FRONTEND=noninteractive \
 	apt-get install -y --no-install-recommends \
 		autoconf \
 		automake \

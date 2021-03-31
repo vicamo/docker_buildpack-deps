@@ -26,10 +26,6 @@ env:
   - VERSION=debian/buster/mipsel
   - VERSION=debian/buster/ppc64el
   - VERSION=debian/buster/s390x
-  - VERSION=debian/jessie/amd64
-  - VERSION=debian/jessie/armel
-  - VERSION=debian/jessie/armhf
-  - VERSION=debian/jessie/i386
   - VERSION=debian/sid/alpha
   - VERSION=debian/sid/amd64
   - VERSION=debian/sid/arm64
@@ -67,12 +63,6 @@ env:
   - VERSION=ubuntu/bionic/i386
   - VERSION=ubuntu/bionic/ppc64el
   - VERSION=ubuntu/bionic/s390x
-  - VERSION=ubuntu/eoan/amd64
-  - VERSION=ubuntu/eoan/arm64
-  - VERSION=ubuntu/eoan/armhf
-  - VERSION=ubuntu/eoan/i386
-  - VERSION=ubuntu/eoan/ppc64el
-  - VERSION=ubuntu/eoan/s390x
   - VERSION=ubuntu/focal/amd64
   - VERSION=ubuntu/focal/arm64
   - VERSION=ubuntu/focal/armhf
@@ -83,6 +73,11 @@ env:
   - VERSION=ubuntu/groovy/armhf
   - VERSION=ubuntu/groovy/ppc64el
   - VERSION=ubuntu/groovy/s390x
+  - VERSION=ubuntu/hirsute/amd64
+  - VERSION=ubuntu/hirsute/arm64
+  - VERSION=ubuntu/hirsute/armhf
+  - VERSION=ubuntu/hirsute/ppc64el
+  - VERSION=ubuntu/hirsute/s390x
   - VERSION=ubuntu/xenial/amd64 QEMU_SUITE=bionic
   - VERSION=ubuntu/xenial/arm64 QEMU_SUITE=bionic
   - VERSION=ubuntu/xenial/armhf QEMU_SUITE=bionic
@@ -110,8 +105,20 @@ matrix:
   # https://github.com/vicamo/docker_buildpack-deps/issues/54
   - env: VERSION=debian/sid/i386
   - env: VERSION=debian/bullseye/i386
-  # https://github.com/vicamo/docker_buildpack-deps/issues/55
-  - env: VERSION=debian/sid/ppc64
+  # https://bugs.launchpad.net/ubuntu/+source/runc/+bug/1916485
+  - env: VERSION=ubuntu/hirsute/arm64
+  # https://bugs.launchpad.net/ubuntu/+source/runc/+bug/1916485
+  - env: VERSION=ubuntu/hirsute/armhf
+  # https://bugs.launchpad.net/ubuntu/+source/runc/+bug/1916485
+  - env: VERSION=ubuntu/hirsute/ppc64el
+  # https://bugs.launchpad.net/ubuntu/+source/runc/+bug/1916485
+  - env: VERSION=ubuntu/hirsute/s390x
+  # https://github.com/vicamo/docker_buildpack-deps/issues/58
+  - env: VERSION=debian/sid/hppa
+  # https://github.com/vicamo/docker_buildpack-deps/issues/58
+  - env: VERSION=debian/sid/m68k
+  # https://github.com/vicamo/docker_buildpack-deps/issues/58
+  - env: VERSION=debian/sid/sh4
 
 branches:
   only:

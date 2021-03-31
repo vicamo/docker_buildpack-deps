@@ -1,0 +1,618 @@
+{
+  "debian/bullseye/amd64": {
+    "suite": "testing",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/bullseye/arm64": {
+    "suite": "testing",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/bullseye/armel": {
+    "suite": "testing",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/bullseye/armhf": {
+    "suite": "testing",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/bullseye/i386": {
+    "suite": "testing",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/bullseye/mips64el": {
+    "suite": "testing",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/bullseye/mipsel": {
+    "suite": "testing",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/bullseye/ppc64el": {
+    "suite": "testing",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/bullseye/s390x": {
+    "suite": "testing",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/buster/amd64": {
+    "suite": "stable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/buster/arm64": {
+    "suite": "stable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/buster/armel": {
+    "suite": "stable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/buster/armhf": {
+    "suite": "stable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/buster/i386": {
+    "suite": "stable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/buster/mips": {
+    "suite": "stable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/buster/mips64el": {
+    "suite": "stable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/buster/mipsel": {
+    "suite": "stable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/buster/ppc64el": {
+    "suite": "stable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/buster/s390x": {
+    "suite": "stable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/alpha": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/amd64": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/arm64": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/armel": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/armhf": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/hppa": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/hurd-i386": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/i386": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/kfreebsd-amd64": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/kfreebsd-i386": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/m68k": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/mips64el": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/mipsel": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/powerpc": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/powerpcspe": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/ppc64": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/ppc64el": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/s390x": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/sh4": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/sparc64": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/sid/x32": {
+    "suite": "unstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/stretch/amd64": {
+    "suite": "oldstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/stretch/arm64": {
+    "suite": "oldstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/stretch/armel": {
+    "suite": "oldstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/stretch/armhf": {
+    "suite": "oldstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/stretch/i386": {
+    "suite": "oldstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/stretch/mips": {
+    "suite": "oldstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/stretch/mips64el": {
+    "suite": "oldstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/stretch/mipsel": {
+    "suite": "oldstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/stretch/ppc64el": {
+    "suite": "oldstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "debian/stretch/s390x": {
+    "suite": "oldstable",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/bionic/amd64": {
+    "suite": "18.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/bionic/arm64": {
+    "suite": "18.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/bionic/armhf": {
+    "suite": "18.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/bionic/i386": {
+    "suite": "18.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/bionic/ppc64el": {
+    "suite": "18.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/bionic/s390x": {
+    "suite": "18.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/focal/amd64": {
+    "suite": "20.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/focal/arm64": {
+    "suite": "20.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/focal/armhf": {
+    "suite": "20.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/focal/ppc64el": {
+    "suite": "20.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/focal/s390x": {
+    "suite": "20.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/groovy/amd64": {
+    "suite": "20.10",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/groovy/arm64": {
+    "suite": "20.10",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/groovy/armhf": {
+    "suite": "20.10",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/groovy/ppc64el": {
+    "suite": "20.10",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/groovy/s390x": {
+    "suite": "20.10",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/hirsute/amd64": {
+    "suite": "21.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/hirsute/arm64": {
+    "suite": "21.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/hirsute/armhf": {
+    "suite": "21.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/hirsute/ppc64el": {
+    "suite": "21.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/hirsute/s390x": {
+    "suite": "21.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/xenial/amd64": {
+    "suite": "16.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/xenial/arm64": {
+    "suite": "16.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/xenial/armhf": {
+    "suite": "16.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/xenial/i386": {
+    "suite": "16.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/xenial/ppc64el": {
+    "suite": "16.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  },
+  "ubuntu/xenial/s390x": {
+    "suite": "16.04",
+    "variants": [
+      "curl",
+      "scm",
+      ""
+    ]
+  }
+}
