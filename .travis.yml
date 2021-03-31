@@ -107,6 +107,14 @@ matrix:
   - env: VERSION=debian/bullseye/i386
   # https://github.com/vicamo/docker_buildpack-deps/issues/55
   - env: VERSION=debian/sid/ppc64
+  # https://bugs.launchpad.net/ubuntu/+source/runc/+bug/1916485
+  - env: VERSION=ubuntu/hirsute/arm64
+  # https://bugs.launchpad.net/ubuntu/+source/runc/+bug/1916485
+  - env: VERSION=ubuntu/hirsute/armhf
+  # https://bugs.launchpad.net/ubuntu/+source/runc/+bug/1916485
+  - env: VERSION=ubuntu/hirsute/ppc64el
+  # https://bugs.launchpad.net/ubuntu/+source/runc/+bug/1916485
+  - env: VERSION=ubuntu/hirsute/s390x
 
 branches:
   only:
