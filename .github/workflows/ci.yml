@@ -8,6 +8,11 @@ on:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      include_eol:
+        description: 'Build also EOL-ed suites'
+        type: boolean
+        default: false
   schedule:
     - cron: 0 0 * * 0
 
@@ -22,42 +27,263 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  INCLUDE_EOL: ${{ inputs.include_eol && 'true' || '' }}
+  DRY_RUN: ${{ github.ref_name != 'master' && 'true' || '' }}
+
 jobs:
 
   generate-jobs:
     name: Generate Jobs
     runs-on: ubuntu-latest
     outputs:
-      strategy: ${{ steps.generate-jobs.outputs.strategy }}
+      codenames: ${{ steps.generate-jobs.outputs.codenames }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: docker-library/bashbrew@HEAD
+      - name: Debian Releases Info
+        id: debian
+        uses: vicamo/actions-library/debian-releases@v1
+      - name: Ubuntu Releases Info
+        id: ubuntu
+        uses: vicamo/actions-library/ubuntu-releases@v1
       - id: generate-jobs
         name: Generate Jobs
+        env:
+          DEBIAN_JSON: ${{ steps.debian.outputs.json }}
+          UBUNTU_JSON: ${{ steps.ubuntu.outputs.json }}
         run: |
-          strategy="$("$BASHBREW_SCRIPTS/github-actions/generate.sh")"
+          platform_map='[
+            ["amd64", "linux/amd64"],
+            ["arm", "linux/arm"],
+            ["arm64", "linux/arm64/v8"],
+            ["armel", "linux/arm/v5"],
+            ["armhf", "linux/arm/v7"],
+            ["i386", "linux/386"],
+            ["loong64", "linux/loong64"],
+            ["mips64el", "linux/mips64le"],
+            ["ppc64el", "linux/ppc64le"],
+            ["riscv64", "linux/riscv64"],
+            ["s390x", "linux/s390x"],
 
-          EOF="EOF-$RANDOM-$RANDOM-$RANDOM"
-          echo "strategy<<$EOF" >> "$GITHUB_OUTPUT"
-          jq <<<"$strategy" . | tee -a "$GITHUB_OUTPUT"
-          echo "$EOF" >> "$GITHUB_OUTPUT"
+            ["mips", "linux/mips"],
+            ["mipsel", "linux/mipsle"],
+            ["powerpc", "linux/ppc"],
+            ["ppc64", "linux/ppc64"],
+            ["s390", "linux/s390"],
+            ["sparc", "linux/sparc"],
+            ["sparc64", "linux/sparc64"],
+            ["x32", "linux/amd64p32"],
 
-  test:
+            ["alpha", "linux/alpha"],
+            ["hppa", "linux/hppa"],
+            ["m68k", "linux/m68k"],
+            ["sh4", "linux/sh4"]
+          ]'
+          disabled_codename='["experimental"]'
+          disabled_arches='["hurd-amd64", "hurd-i386", "ia64", "kfreebsd-amd64", "kfreebsd-i386", "s390", "x32"]'
+
+          codenames="$(jq -n -c -M \
+              --argjson debian "${DEBIAN_JSON}" \
+              --argjson ubuntu "${UBUNTU_JSON}" \
+              --argjson disabled_codename "${disabled_codename}" \
+              --argjson disabled_arches "${disabled_arches}" \
+              --argjson platform_map "${platform_map}" \
+              '$debian + $ubuntu |
+                  map(select(.codename as $c | $disabled_codename |
+                             index($c) == null)) |
+                  map({
+                        "distribution":.distribution,
+                        "codename":.codename,
+                        "suite":.suite,
+                        "active":.active,
+                        "platforms":(
+                                      .architectures - $disabled_arches |
+                                      map(. as $arch |
+                                          $platform_map |
+                                          map(select(.[0] == $arch))[0][1]) |
+                                      join(",")
+                                    ),
+                        "repository":"vicamo/buildpack-deps"
+                      })
+              ')"
+
+          if [ -z "${INCLUDE_EOL}" ]; then
+            codenames="$(echo "${codenames}" | jq -c -M 'map(select(.active))')"
+          fi
+
+          echo "::group::Built JSON(codenames)"
+          echo "${codenames}" | jq
+          echo "::endgroup::"
+
+          echo "codenames=${codenames}" | tee -a "${GITHUB_OUTPUT}"
+
+  build:
     needs: generate-jobs
-    strategy: ${{ fromJson(needs.generate-jobs.outputs.strategy) }}
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.generate-jobs.outputs.codenames) }}
+    name: ${{ format('{0}/{1}', matrix.distribution, matrix.codename) }}
+    runs-on: ubuntu-latest
+    env:
+      REPOSITORY: ${{ matrix.repository }}
+      DISTRO: ${{ matrix.distribution }}
+      CODENAME: ${{ matrix.codename }}
+      SUITE: ${{ matrix.suite }}
+      PLATFORMS: ${{ matrix.platforms }}
     steps:
-      - uses: actions/checkout@v3
-      - name: Prepare Environment
-        run: ${{ matrix.runs.prepare }}
-      - name: Pull Dependencies
-        run: ${{ matrix.runs.pull }}
-      - name: Build ${{ matrix.name }}
-        run: ${{ matrix.runs.build }}
-      - name: History ${{ matrix.name }}
-        run: ${{ matrix.runs.history }}
-      - name: Test ${{ matrix.name }}
-        run: ${{ matrix.runs.test }}
-      - name: '"docker images"'
-        run: ${{ matrix.runs.images }}
+      - name: Free Disk Space (Ubuntu)
+        uses: insightsengineering/disk-space-reclaimer@v1
+        with:
+          android: true
+          docker-images: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: true
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply templates
+        run: |
+          version="${DISTRO}/${CODENAME}"
+          mkdir -p "${version}"
+          ./versions.sh "${version}"
+          ./apply-templates.sh "${version}"
+          echo "::group::${REPOSITORY}:${CODENAME}"
+          cat "${version}"/Dockerfile
+          echo "::endgroup::"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          image: vicamo/binfmt:master
+
+      - name: Setup containerd image store
+        run: |
+          echo "::group::docker daemon config"
+          cat /etc/docker/daemon.json | \
+              jq '. | .+{"features": {"containerd-snapshotter": true}}' | \
+              sudo tee /etc/docker/daemon.json.new
+          sudo mv /etc/docker/daemon.json.new /etc/docker/daemon.json
+          echo "::endgroup::"
+
+          sudo systemctl restart docker
+
+          echo "::group::docker driver status"
+          docker info -f '{{ .DriverStatus }}'
+          echo "::endgroup::"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: ${{ matrix.platforms }}
+
+      - name: Login to Docker Hub
+        if: ${{ github.ref_name == 'master' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.username }}
+          password: ${{ secrets.password }}
+
+      - name: Pull base images
+        id: available
+        run: |
+          available=()
+
+          for platform in $(echo "${PLATFORMS}" | tr ',' ' '); do
+            echo "::group::${DISTRO}:${CODENAME} (${platform})"
+            if docker pull --platform "${platform}" "vicamo/${DISTRO}:${CODENAME}"; then
+              available+=("${platform}")
+            fi
+            echo "::endgroup::"
+          done
+
+          echo "available=$(IFS=, ; echo "${available[*]}")" | tee -a "${GITHUB_OUTPUT}"
+
+      - name: Docker meta for curl images
+        id: meta-curl
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ matrix.repository }}
+          tags: |
+            ${{ matrix.codename }}-curl
+            ${{ matrix.suite && format('{0}-curl', matrix.suite) || '' }}
+            ${{ matrix.suite == 'stable' && 'latest-curl' || '' }}
+          flavor: |
+            latest=false
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+
+      - name: Build curl images
+        id: build-curl
+        uses: docker/build-push-action@v5
+        with:
+          annotations: ${{ contains(steps.available.outputs.available, ',') && steps.meta-curl.outputs.annotations || '' }}
+          build-args: |
+            BASEIMAGE=vicamo/${{ matrix.distribution }}:${{ matrix.codename }}
+          context: ${{ matrix.distribution }}/${{ matrix.codename }}
+          labels: ${{ steps.meta-curl.outputs.labels }}
+          load: true
+          platforms: ${{ steps.available.outputs.available }}
+          provenance: false
+          tags: ${{ steps.meta-curl.outputs.tags }}
+          target: curl
+
+      - name: Docker meta for scm images
+        id: meta-scm
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ matrix.repository }}
+          tags: |
+            ${{ matrix.codename }}-scm
+            ${{ matrix.suite && format('{0}-scm', matrix.suite) || '' }}
+            ${{ matrix.suite == 'stable' && 'latest-scm' || '' }}
+          flavor: |
+            latest=false
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+
+      - name: Build scm images
+        id: build-scm
+        uses: docker/build-push-action@v5
+        with:
+          annotations: ${{ contains(steps.available.outputs.available, ',') && steps.meta-scm.outputs.annotations || '' }}
+          build-args: |
+            BASEIMAGE=vicamo/${{ matrix.distribution }}:${{ matrix.codename }}
+          context: ${{ matrix.distribution }}/${{ matrix.codename }}
+          labels: ${{ steps.meta-scm.outputs.labels }}
+          load: true
+          platforms: ${{ steps.available.outputs.available }}
+          provenance: false
+          tags: ${{ steps.meta-scm.outputs.tags }}
+          target: scm
+
+      - name: Docker meta for buidpack-deps images
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ matrix.repository }}
+          tags: |
+            ${{ matrix.codename }}
+            ${{ matrix.suite }}
+            ${{ matrix.suite == 'stable' && 'latest' || '' }}
+          flavor: |
+            latest=false
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+
+      - name: Build buildpack-deps images
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          annotations: ${{ contains(steps.available.outputs.available, ',') && steps.meta.outputs.annotations || '' }}
+          build-args: |
+            BASEIMAGE=vicamo/${{ matrix.distribution }}:${{ matrix.codename }}
+          context: ${{ matrix.distribution }}/${{ matrix.codename }}
+          labels: ${{ steps.meta.outputs.labels }}
+          load: true
+          platforms: ${{ steps.available.outputs.available }}
+          provenance: false
+          tags: ${{ steps.meta.outputs.tags }}
+          target: final
