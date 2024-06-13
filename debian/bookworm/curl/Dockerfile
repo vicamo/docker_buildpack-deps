@@ -22,4 +22,13 @@ RUN set -eux; \
 		) \
 		wget \
 	; \
-	rm -rf /var/lib/apt/lists/*
+# only suites with APT 2.7.8+ have "apt-get dist-clean"
+# https://tracker.debian.org/news/1492892/accepted-apt-278-source-into-unstable/
+	$( \
+		ver=$( (apt-cache show apt 2>/dev/null | grep -m1 ^Version: | awk '{print $2}') || true); \
+		if dpkg --compare-versions "$ver" ge 2.7.8; then \
+			echo "apt-get dist-clean"; \
+		else \
+			echo "rm -rf /var/lib/apt/lists/*"; \
+		fi \
+	)
