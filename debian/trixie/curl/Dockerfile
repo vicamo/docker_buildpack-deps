@@ -13,7 +13,13 @@ RUN set -eux; \
 		curl \
 		gnupg \
 		netbase \
-		sq \
+# we want versions of "sq" that contain https://gitlab.com/sequoia-pgp/sequoia/-/commit/b41e1504cd29097328cb21f95808c9972188499e (and thus "sq keyserver" subcommands; 0.26+)
+		$( \
+			ver=$( (apt-cache show sq 2>/dev/null | grep -m1 ^Version: | awk '{print $2}') || true); \
+			if dpkg --compare-versions "$ver" ge 0.26; then \
+				echo "sq"; \
+			fi \
+		) \
 		wget \
 	; \
 	apt-get dist-clean
