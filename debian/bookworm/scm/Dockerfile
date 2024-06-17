@@ -9,10 +9,16 @@ FROM buildpack-deps:bookworm-curl
 RUN set -eux; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
+		$(for pkg in \
+				mercurial \
+				subversion \
+		; do \
+			if [ -n "$(apt-cache show "${pkg}" 2>/dev/null)" ]; then \
+				echo "${pkg}"; \
+			fi; \
+		done) \
 		git \
-		mercurial \
 		openssh-client \
-		subversion \
 		\
 # procps is very common in build systems, and is a reasonably small package
 		procps \
