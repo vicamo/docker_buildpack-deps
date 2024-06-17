@@ -9,10 +9,19 @@ FROM buildpack-deps:trixie-scm
 RUN set -ex; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
+		$(for pkg in \
+				default-libmysqlclient-dev \
+				libgmp-dev \
+				libmaxminddb-dev \
+				libwebp-dev \
+		; do \
+			if apt-cache show "${pkg}" >/dev/null 2>&1; then \
+				echo "${pkg}"; \
+			fi; \
+		done) \
 		autoconf \
 		automake \
 		bzip2 \
-		default-libmysqlclient-dev \
 		dpkg-dev \
 		file \
 		g++ \
@@ -26,13 +35,11 @@ RUN set -ex; \
 		libffi-dev \
 		libgdbm-dev \
 		libglib2.0-dev \
-		libgmp-dev \
 		libjpeg-dev \
 		libkrb5-dev \
 		liblzma-dev \
 		libmagickcore-dev \
 		libmagickwand-dev \
-		libmaxminddb-dev \
 		libncurses5-dev \
 		libncursesw5-dev \
 		libpng-dev \
@@ -41,7 +48,6 @@ RUN set -ex; \
 		libsqlite3-dev \
 		libssl-dev \
 		libtool \
-		libwebp-dev \
 		libxml2-dev \
 		libxslt-dev \
 		libyaml-dev \
