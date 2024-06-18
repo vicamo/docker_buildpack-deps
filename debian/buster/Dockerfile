@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM debian:buster AS curl
+ARG BASEIMAGE=debian:buster
+FROM ${BASEIMAGE} AS curl
 
 RUN set -eux; \
 	apt-get update; \

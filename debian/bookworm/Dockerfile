@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM debian:bookworm AS curl
+ARG BASEIMAGE=debian:bookworm
+FROM ${BASEIMAGE} AS curl
 
 RUN set -eux; \
 	apt-get update; \

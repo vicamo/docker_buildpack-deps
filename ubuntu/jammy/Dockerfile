@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM ubuntu:jammy AS curl
+ARG BASEIMAGE=ubuntu:jammy
+FROM ${BASEIMAGE} AS curl
 
 RUN set -eux; \
 	apt-get update; \

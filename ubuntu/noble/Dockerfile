@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM ubuntu:noble AS curl
+ARG BASEIMAGE=ubuntu:noble
+FROM ${BASEIMAGE} AS curl
 
 RUN set -eux; \
 	apt-get update; \

@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM debian:bullseye AS curl
+ARG BASEIMAGE=debian:bullseye
+FROM ${BASEIMAGE} AS curl
 
 RUN set -eux; \
 	apt-get update; \

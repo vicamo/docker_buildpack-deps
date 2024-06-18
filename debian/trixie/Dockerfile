@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM debian:trixie AS curl
+ARG BASEIMAGE=debian:trixie
+FROM ${BASEIMAGE} AS curl
 
 RUN set -eux; \
 	apt-get update; \

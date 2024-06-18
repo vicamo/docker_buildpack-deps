@@ -1,5 +1,6 @@
 {{ include "shared" -}}
-FROM {{ env.dist }}:{{ env.codename }} AS curl
+ARG BASEIMAGE={{ env.dist }}:{{ env.codename }}
+FROM ${BASEIMAGE} AS curl
 
 RUN set -eux; \
 	apt-get update; \

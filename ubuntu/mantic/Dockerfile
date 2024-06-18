@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM ubuntu:mantic AS curl
+ARG BASEIMAGE=ubuntu:mantic
+FROM ${BASEIMAGE} AS curl
 
 RUN set -eux; \
 	apt-get update; \

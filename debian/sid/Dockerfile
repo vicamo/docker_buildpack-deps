@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM debian:sid AS curl
+ARG BASEIMAGE=debian:sid
+FROM ${BASEIMAGE} AS curl
 
 RUN set -eux; \
 	apt-get update; \

@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM ubuntu:focal AS curl
+ARG BASEIMAGE=ubuntu:focal
+FROM ${BASEIMAGE} AS curl
 
 RUN set -eux; \
 	apt-get update; \
