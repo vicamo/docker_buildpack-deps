@@ -1,5 +1,6 @@
 {{ include "shared" -}}
-FROM buildpack-deps:{{ env.codename }}-curl
+ARG BASEIMAGE=buildpack-deps:{{ env.codename }}-curl
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

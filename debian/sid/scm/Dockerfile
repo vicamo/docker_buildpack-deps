@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:sid-curl
+ARG BASEIMAGE=buildpack-deps:sid-curl
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

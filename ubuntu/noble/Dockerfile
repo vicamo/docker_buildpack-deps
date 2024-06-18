@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:noble-scm
+ARG BASEIMAGE=buildpack-deps:noble-scm
+FROM ${BASEIMAGE}
 
 RUN set -ex; \
 	apt-get update; \

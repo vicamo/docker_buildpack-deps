@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM ubuntu:jammy
+ARG BASEIMAGE=ubuntu:jammy
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

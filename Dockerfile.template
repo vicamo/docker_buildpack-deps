@@ -1,5 +1,6 @@
 {{ include "shared" -}}
-FROM buildpack-deps:{{ env.codename }}-scm
+ARG BASEIMAGE=buildpack-deps:{{ env.codename }}-scm
+FROM ${BASEIMAGE}
 
 RUN set -ex; \
 	apt-get update; \

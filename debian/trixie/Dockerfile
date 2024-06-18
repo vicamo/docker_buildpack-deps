@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:trixie-scm
+ARG BASEIMAGE=buildpack-deps:trixie-scm
+FROM ${BASEIMAGE}
 
 RUN set -ex; \
 	apt-get update; \

@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM debian:trixie
+ARG BASEIMAGE=debian:trixie
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

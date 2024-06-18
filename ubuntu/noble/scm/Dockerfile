@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:noble-curl
+ARG BASEIMAGE=buildpack-deps:noble-curl
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

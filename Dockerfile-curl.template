@@ -1,5 +1,6 @@
 {{ include "shared" -}}
-FROM {{ env.dist }}:{{ env.codename }}
+ARG BASEIMAGE={{ env.dist }}:{{ env.codename }}
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:sid-scm
+ARG BASEIMAGE=buildpack-deps:sid-scm
+FROM ${BASEIMAGE}
 
 RUN set -ex; \
 	apt-get update; \

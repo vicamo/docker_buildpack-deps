@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:bullseye-scm
+ARG BASEIMAGE=buildpack-deps:bullseye-scm
+FROM ${BASEIMAGE}
 
 RUN set -ex; \
 	apt-get update; \

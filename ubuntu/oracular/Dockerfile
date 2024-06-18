@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:oracular-scm
+ARG BASEIMAGE=buildpack-deps:oracular-scm
+FROM ${BASEIMAGE}
 
 RUN set -ex; \
 	apt-get update; \

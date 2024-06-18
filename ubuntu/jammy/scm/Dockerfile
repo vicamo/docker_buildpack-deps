@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:jammy-curl
+ARG BASEIMAGE=buildpack-deps:jammy-curl
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

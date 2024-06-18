@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:trixie-curl
+ARG BASEIMAGE=buildpack-deps:trixie-curl
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

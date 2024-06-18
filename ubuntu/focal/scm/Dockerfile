@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:focal-curl
+ARG BASEIMAGE=buildpack-deps:focal-curl
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

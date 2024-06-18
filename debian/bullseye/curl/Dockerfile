@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM debian:bullseye
+ARG BASEIMAGE=debian:bullseye
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

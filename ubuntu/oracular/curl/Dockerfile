@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM ubuntu:oracular
+ARG BASEIMAGE=ubuntu:oracular
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

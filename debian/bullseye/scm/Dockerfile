@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:bullseye-curl
+ARG BASEIMAGE=buildpack-deps:bullseye-curl
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

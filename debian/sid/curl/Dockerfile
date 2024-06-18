@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM debian:sid
+ARG BASEIMAGE=debian:sid
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

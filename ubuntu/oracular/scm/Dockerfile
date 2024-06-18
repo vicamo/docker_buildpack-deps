@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:oracular-curl
+ARG BASEIMAGE=buildpack-deps:oracular-curl
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

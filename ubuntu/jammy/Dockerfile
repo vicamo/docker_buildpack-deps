@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:jammy-scm
+ARG BASEIMAGE=buildpack-deps:jammy-scm
+FROM ${BASEIMAGE}
 
 RUN set -ex; \
 	apt-get update; \

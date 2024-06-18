@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM ubuntu:noble
+ARG BASEIMAGE=ubuntu:noble
+FROM ${BASEIMAGE}
 
 RUN set -eux; \
 	apt-get update; \

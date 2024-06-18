@@ -4,7 +4,8 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:focal-scm
+ARG BASEIMAGE=buildpack-deps:focal-scm
+FROM ${BASEIMAGE}
 
 RUN set -ex; \
 	apt-get update; \
