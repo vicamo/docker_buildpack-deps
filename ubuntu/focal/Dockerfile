@@ -4,15 +4,91 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM buildpack-deps:focal-scm
+ARG BASEIMAGE=ubuntu:focal
+FROM ${BASEIMAGE} AS curl
+
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		ca-certificates \
+		curl \
+		gnupg \
+		netbase \
+# we want versions of "sq" that contain https://gitlab.com/sequoia-pgp/sequoia/-/commit/b41e1504cd29097328cb21f95808c9972188499e (and thus "sq keyserver" subcommands; 0.26+)
+		$( \
+			ver=$( (apt-cache show sq 2>/dev/null | grep -m1 ^Version: | awk '{print $2}') || true); \
+			if dpkg --compare-versions "$ver" ge 0.26; then \
+				echo "sq"; \
+			fi \
+		) \
+		wget \
+# https://bugs.debian.org/929417
+		tzdata \
+	; \
+# only suites with APT 2.7.8+ have "apt-get dist-clean"
+# https://tracker.debian.org/news/1492892/accepted-apt-278-source-into-unstable/
+	$( \
+		ver=$( (apt-cache show apt 2>/dev/null | grep -m1 ^Version: | awk '{print $2}') || true); \
+		if dpkg --compare-versions "$ver" ge 2.7.8; then \
+			echo "apt-get dist-clean"; \
+		else \
+			echo "rm -rf /var/lib/apt/lists/*"; \
+		fi \
+	)
+
+################################################################################
+
+FROM curl AS scm
+
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		$(for pkg in \
+				mercurial \
+				subversion \
+		; do \
+			if [ -n "$(apt-cache show "${pkg}" 2>/dev/null)" ]; then \
+				echo "${pkg}"; \
+			fi; \
+		done) \
+		bzr \
+		git \
+		openssh-client \
+		\
+# procps is very common in build systems, and is a reasonably small package
+		procps \
+	; \
+# only suites with APT 2.7.8+ have "apt-get dist-clean"
+# https://tracker.debian.org/news/1492892/accepted-apt-278-source-into-unstable/
+	$( \
+		ver=$( (apt-cache show apt 2>/dev/null | grep -m1 ^Version: | awk '{print $2}') || true); \
+		if dpkg --compare-versions "$ver" ge 2.7.8; then \
+			echo "apt-get dist-clean"; \
+		else \
+			echo "rm -rf /var/lib/apt/lists/*"; \
+		fi \
+	)
+
+################################################################################
+
+FROM scm AS final
 
 RUN set -ex; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
+		$(for pkg in \
+				default-libmysqlclient-dev \
+				libgmp-dev \
+				libmaxminddb-dev \
+				libwebp-dev \
+		; do \
+			if apt-cache show "${pkg}" >/dev/null 2>&1; then \
+				echo "${pkg}"; \
+			fi; \
+		done) \
 		autoconf \
 		automake \
 		bzip2 \
-		default-libmysqlclient-dev \
 		dpkg-dev \
 		file \
 		g++ \
@@ -26,13 +102,11 @@ RUN set -ex; \
 		libffi-dev \
 		libgdbm-dev \
 		libglib2.0-dev \
-		libgmp-dev \
 		libjpeg-dev \
 		libkrb5-dev \
 		liblzma-dev \
 		libmagickcore-dev \
 		libmagickwand-dev \
-		libmaxminddb-dev \
 		libncurses5-dev \
 		libncursesw5-dev \
 		libpng-dev \
@@ -41,7 +115,6 @@ RUN set -ex; \
 		libsqlite3-dev \
 		libssl-dev \
 		libtool \
-		libwebp-dev \
 		libxml2-dev \
 		libxslt-dev \
 		libyaml-dev \
@@ -51,4 +124,13 @@ RUN set -ex; \
 		xz-utils \
 		zlib1g-dev \
 	; \
-	rm -rf /var/lib/apt/lists/*
+# only suites with APT 2.7.8+ have "apt-get dist-clean"
+# https://tracker.debian.org/news/1492892/accepted-apt-278-source-into-unstable/
+	$( \
+		ver=$( (apt-cache show apt 2>/dev/null | grep -m1 ^Version: | awk '{print $2}') || true); \
+		if dpkg --compare-versions "$ver" ge 2.7.8; then \
+			echo "apt-get dist-clean"; \
+		else \
+			echo "rm -rf /var/lib/apt/lists/*"; \
+		fi \
+	)

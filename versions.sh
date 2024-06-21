@@ -19,13 +19,15 @@ for version in "${distsSuites[@]}"; do
 		debian)
 			# "stable", "oldstable", etc.
 			suite="$(
-				wget -qO- -o /dev/null "https://deb.debian.org/debian/dists/$codename/Release" \
+				{ wget -qO- -o /dev/null "https://deb.debian.org/debian/dists/$codename/Release" \
+					|| wget -qO- -o /dev/null "https://archive.debian.org/debian/dists/$codename/Release"; } \
 					| gawk -F ':[[:space:]]+' '$1 == "Suite" { print $2 }'
 			)"
 			;;
 		ubuntu)
 			suite="$(
-				wget -qO- -o /dev/null "http://archive.ubuntu.com/ubuntu/dists/$codename/Release" \
+				{ wget -qO- -o /dev/null "http://archive.ubuntu.com/ubuntu/dists/$codename/Release" \
+					|| wget -qO- -o /dev/null "https://old-releases.ubuntu.com/ubuntu/dists/$codename/Release"; } \
 					| gawk -F ':[[:space:]]+' '$1 == "Version" { print $2 }'
 			)"
 			;;
