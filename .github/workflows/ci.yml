@@ -277,10 +277,11 @@ jobs:
       DRY_RUN: ${{ github.ref_name != 'main' }}
     steps:
 
-      - name: Set up QEMU (docker/setup-qemu-action)
-        uses: docker/setup-qemu-action@v3
-        with:
-          image: vicamo/binfmt:latest
+      - name: Set up QEMU (Ubuntu)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -yq binfmt-support qemu-user-static
+          ls -al /proc/sys/fs/binfmt_misc
 
       - name: Checkout
         uses: actions/checkout@v4
