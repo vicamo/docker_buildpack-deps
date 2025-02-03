@@ -38,7 +38,8 @@ getArches() {
 	local parentRepoToArchesStr
 	parentRepoToArchesStr="$(
 		find -name 'Dockerfile' -exec awk -v officialImagesBase="$officialImagesBase" '
-				toupper($1) == "FROM" && $2 !~ /^('"$repo"'|scratch|.*\/.*)(:|$)/ {
+				$2 ~ /^BASEIMAGE=/ && $2 !~ /=('"$repo"'|scratch|.*\/.*)(:|$)/ {
+					sub(/^BASEIMAGE=/, "", $2);
 					printf "%s%s\n", officialImagesBase, $2
 				}
 			' '{}' + \
@@ -81,7 +82,7 @@ for version; do
 		versionAliases+=( latest )
 	fi
 
-	parent="$(awk 'toupper($1) == "FROM" { print $2 }' "$version/curl/Dockerfile")"
+	parent="$(awk '$2 ~ /^BASEIMAGE=/ { sub(/^BASEIMAGE=/, "", $2); print $2 }' "$version/curl/Dockerfile")"
 	arches="${parentRepoToArches[$parent]}"
 
 	variants="$(jq -r '.[env.version].variants | map(@sh) | join(" ")' versions.json)"

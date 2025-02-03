@@ -2,14 +2,22 @@ name: GitHub CI
 
 on:
   pull_request:
+    branches:
+      - master
   push:
+    branches:
+      - master
   workflow_dispatch:
+    inputs:
+      wanted:
+        description: >
+          Build selected suites. Use "all" for all buildable suites, "active"
+          for all non-EOL suites, "eol" for all EOL-ed suites, or
+          comma-separated codenames. Default is "active".
+        type: string
+        default: 'active'
   schedule:
     - cron: 0 0 * * 0
-
-defaults:
-  run:
-    shell: 'bash -Eeuo pipefail -x {0}'
 
 concurrency:
   group: ${{ github.ref }}
@@ -24,36 +32,401 @@ jobs:
     name: Generate Jobs
     runs-on: ubuntu-latest
     outputs:
-      strategy: ${{ steps.generate-jobs.outputs.strategy }}
+      codenames: ${{ steps.processing.outputs.codenames }}
+    env:
+      DEBIAN_ARCHES: |
+        [
+          ["amd64", "linux/amd64"],
+          ["arm", "linux/arm"],
+          ["arm64", "linux/arm64"],
+          ["armel", "linux/arm/v5"],
+          ["armhf", "linux/arm/v7"],
+          ["i386", "linux/386"],
+          ["loong64", "linux/loong64"],
+          ["lpia", "linux/386/lpia"],
+          ["mips64el", "linux/mips64le"],
+          ["ppc64el", "linux/ppc64le"],
+          ["riscv64", "linux/riscv64"],
+          ["s390x", "linux/s390x"],
+
+          ["mips", "linux/mips"],
+          ["mipsel", "linux/mipsle"],
+          ["powerpc", "linux/ppc"],
+          ["ppc64", "linux/ppc64"],
+          ["s390", "linux/s390"],
+          ["sparc", "linux/sparc"],
+          ["sparc64", "linux/sparc64"],
+          ["x32", "linux/amd64p32"],
+
+          ["alpha", "linux/alpha"],
+          ["hppa", "linux/hppa"],
+          ["m68k", "linux/m68k"],
+          ["sh4", "linux/sh4"]
+        ]
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker-library/bashbrew@HEAD
-      - id: generate-jobs
-        name: Generate Jobs
+      - name: Debian Releases Info
+        id: debian
+        uses: vicamo/actions-library/debian-releases@v1
+      - name: Ubuntu Releases Info
+        id: ubuntu
+        uses: vicamo/actions-library/ubuntu-releases@v1
+
+      - name: Post Processing
+        id: processing
+        env:
+          DEBIAN_JSON: ${{ steps.debian.outputs.json }}
+          UBUNTU_JSON: ${{ steps.ubuntu.outputs.json }}
         run: |
-          strategy="$("$BASHBREW_SCRIPTS/github-actions/generate.sh")"
+          disabled_codename='[
+            "experimental",
+            "hamm",
+            "slink"
+          ]'
+          disabled_arches='[
+            ["lenny", ["arm"], "unavailable"],
+            ["etch", ["alpha", "amd64", "arm", "hppa", "i386", "m68k", "mips", "mipsel", "powerpc", "sparc"], "unavailable"],
+            ["sarge", ["alpha", "arm", "hppa", "i386", "m68k", "mips", "mipsel", "powerpc", "sparc"], "unavailable"],
+            ["woody", ["alpha", "arm", "hppa", "i386", "m68k", "mips", "mipsel", "powerpc", "sparc"], "unavailable"],
+            ["potato", ["alpha", "arm", "i386", "m68k", "powerpc", "sparc"], "unavailable"],
+            ["artful", ["arm64", "armhf", "ppc64el", "s390x"], "unavailable"],
+            ["vivid", ["amd64", "armhf", "i386"], "unavailable"],
+            ["utopic", ["amd64", "arm64", "armhf", "i386", "powerpc", "ppc64el"], "unavailable"],
+            ["trusty", ["powerpc"], "unavailable"],
+            ["precise", ["armel", "powerpc"], "unavailable"],
+            ["karmic", ["lpia"], "unavailable"],
+            ["jaunty", ["lpia"], "unavailable"],
+            ["intrepid", ["lpia"], "unavailable"],
+            ["hardy", ["lpia", "sparc"], "unavailable"],
+            ["gutsy", ["lpia", "sparc"], "unavailable"],
+            ["feisty", ["hppa"], "unavailable"],
+            ["edgy", ["amd64", "hppa", "i386", "powerpc", "sparc"], "unavailable"],
+            ["breezy", ["sparc"], "unavailable"],
+            ["hoary", ["amd64", "i386", "powerpc", "sparc"], "unavailable"],
+            ["warty", ["amd64", "i386", "powerpc"], "unavailable"],
 
-          EOF="EOF-$RANDOM-$RANDOM-$RANDOM"
-          echo "strategy<<$EOF" >> "$GITHUB_OUTPUT"
-          jq <<<"$strategy" . | tee -a "$GITHUB_OUTPUT"
-          echo "$EOF" >> "$GITHUB_OUTPUT"
+            ["any", ["hurd-amd64", "hurd-i386", "kfreebsd-amd64", "kfreebsd-i386"], "non-linux"],
+            ["any", ["ia64", "x32"], "no-qemu"],
+            ["any", ["s390"], "qemu-bug"]
+          ]'
+          codenames="$({ echo "${DEBIAN_JSON}"; echo "${UBUNTU_JSON}"; } |
+              jq -s 'map(.[])' |
+              jq -c -M 'map(select(.codename as $c |
+                                   '"${disabled_codename}"' |
+                                   index($c) == null)) |
+                        map(. as $s |
+                            {
+                              "distribution":.distribution,
+                              "codename":.codename,
+                              "suite":.suite,
+                              "active":.active,
+                              "architectures":(.architectures |
+                                               map(select(. as $arch |
+                                                          '"${disabled_arches}"' |
+                                                          map(select((.[0] == $s.codename or .[0] == "any")
+                                                                     and (.[1] | map(select(. == $arch or . == "any")) | length > 0))) |
+                                                          length == 0)) |
+                                               map({
+                                                     "arch":.,
+                                                     "platform":(. as $arch |
+                                                                 '"${DEBIAN_ARCHES}"' |
+                                                                 map(select(.[0] == $arch))[0][1]),
+                                                   }) |
+                                              tostring)
+                            })')"
 
-  test:
+          case "${{ inputs.wanted || 'all' }}" in
+          all) ;;
+          active)
+            codenames="$(echo "${codenames}" | jq -c -M 'map(select(.active))')"
+            ;;
+          eol)
+            codenames="$(echo "${codenames}" | jq -c -M 'map(select(.active | not))')"
+            ;;
+          *)
+            wanted="$(echo "${{ inputs.wanted }}" | sed 's/ //g; s/\([^,]\+\)/"\1"/g')"
+            codenames="$(echo "${codenames}" |
+                jq -c -M 'map(. as $row |
+                              ['"${wanted}"'] | .[] | select($row.codename == .) |
+                              $row)')"
+            ;;
+          esac
+
+          unavailables="$({ echo "${DEBIAN_JSON}"; echo "${UBUNTU_JSON}"; } |
+              jq -s 'map(.[])' |
+              jq -c -M '
+                          map(select(.codename as $c |
+                                     '"$(echo "${codenames}" | jq -c -M 'map(.codename)')"' |
+                                     index($c))) |
+                          map(. as $s |
+                              {
+                                "distribution":$s.distribution,
+                                "codename":$s.codename,
+                                "architectures":(
+                                  $s.architectures |
+                                  map(select(. as $arch |
+                                             '"${disabled_arches}"' |
+                                             map(select((.[0] == $s.codename or .[0] == "any")
+                                                        and (.[1] | map(select( . == $arch or . == "any")) | length > 0)
+                                                        and (.[2] == "unavailable"))) |
+                                             length > 0))
+                                )
+                              }) |
+                          map(select(.architectures | length > 0))
+                        ')"
+
+          codenames="$(echo "${codenames}" |
+              jq -c -M 'map(select(.architectures | fromjson | (length > 0)))')"
+
+          echo "::group::Built JSON(codenames)"
+          echo "${codenames}" | jq
+          echo "::endgroup::"
+
+          echo "::group::Built JSON(disabled architectures due to unavailability)"
+          echo "${unavailables}" | jq
+          echo "::endgroup::"
+
+          {
+            echo "codenames=${codenames}";
+            echo "unavailables=${unavailables}";
+          } | tee -a "${GITHUB_OUTPUT}"
+
+      - name: Set up Docker Buildx
+        if: ${{ steps.processing.outputs.codenames != '[]'
+            || steps.processing.outputs.unavailables != '[]' }}
+        uses: docker/setup-buildx-action@v3
+
+      - name: Check platforms availability
+        if: ${{ steps.processing.outputs.codenames != '[]'
+            || steps.processing.outputs.unavailables != '[]' }}
+        env:
+          CODENAMES: ${{ steps.processing.outputs.codenames }}
+          UNAVAILABLES: ${{ steps.processing.outputs.unavailables }}
+        run: |
+          available='[]'
+          echo "::group::Retrieving image manifest"
+          for image in $({ echo "${CODENAMES}"; echo "${UNAVAILABLES}"; } |
+              jq -s 'map(.[])' |
+              jq -r -M '.[] | .distribution + ":" + .codename' |
+              sort -u); do
+            echo "  $image"
+            read -r -a platforms <<<"$({ docker buildx imagetools inspect "vicamo/$image" 2>/dev/null; true; } |
+                awk '/Platform: +linux/ { print $2 }' |
+                tr '\n' ' ')"
+            platforms_json="$(jq -c -M -n '$ARGS.positional' --args "${platforms[@]}")"
+            available="$(echo "${available}" |
+                jq -c -M '. + [{ "image":"'"${image}"'", "platforms":'"${platforms_json}"' }]')"
+          done
+          echo "::endgroup::"
+
+          echo "::group::Availables"
+          echo "${available}" | jq
+          echo "::endgroup::"
+
+          unbuildables="$(echo "${CODENAMES}" |
+              jq -c -M 'map(. as $s |
+                            ('"${available}"' | map(select(.image == ($s.distribution + ":" + $s.codename))) | map(.platforms[])) as $available |
+                            [
+                              $s.codename,
+                              (
+                                $s.architectures | fromjson |
+                                map(select(. as $a | $available | map(select(. == $a.platform)) | length == 0)) |
+                                map(.arch)
+                              ),
+                              "unavailable"
+                            ]) |
+                        map(select(.[1] | length > 0))')"
+          if [ "${unbuildables}" != "[]" ]; then
+            echo "::group::Images unavalble at present but are to be built"
+            echo "${unbuildables}" | jq -c -M
+            echo "::endgroup::"
+          fi
+
+          buildables="$(echo "${UNAVAILABLES}" |
+              jq -c -M 'map(. as $s | [
+                              $s.codename,
+                              (
+                                ($s.architectures | map(. as $arch | '"${DEBIAN_ARCHES}"' | map(select(.[0] == $arch))[0][1])) as $platforms |
+                                ('"${available}"' | map(select(.image == ($s.distribution + ":" + $s.codename))) | map(.platforms[])) as $available |
+                                $platforms - ($platforms - $available)
+                              ),
+                              "TODOs"
+                            ]) |
+                        map(select(.[1] | length > 0))')"
+          if [ "${buildables}" != "[]" ]; then
+            echo "::group::Images skipped due to unavailability but are avalble now"
+            echo "${buildables}" | jq -c -M
+            echo "::endgroup::"
+          fi
+
+          [ "${unbuildables}" == "[]" ] && [ "${buildables}" == "[]" ] || exit 1
+
+  build:
     needs: generate-jobs
-    strategy: ${{ fromJson(needs.generate-jobs.outputs.strategy) }}
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include: ${{ fromJson(needs.generate-jobs.outputs.codenames) }}
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      DISTRO: ${{ matrix.distribution }}
+      CODENAME: ${{ matrix.codename }}
+      SUITE: ${{ matrix.suite }}
+      REPOSITORY: 'vicamo/buildpack-deps'
+      DRY_RUN: ${{ github.ref_name != 'main' }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Prepare Environment
-        run: ${{ matrix.runs.prepare }}
-      - name: Pull Dependencies
-        run: ${{ matrix.runs.pull }}
-      - name: Build ${{ matrix.name }}
-        run: ${{ matrix.runs.build }}
-      - name: History ${{ matrix.name }}
-        run: ${{ matrix.runs.history }}
-      - name: Test ${{ matrix.name }}
-        run: ${{ matrix.runs.test }}
-      - name: '"docker images"'
-        run: ${{ matrix.runs.images }}
+
+      - name: Set up QEMU (Ubuntu)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -yq binfmt-support qemu-user-static
+          ls -al /proc/sys/fs/binfmt_misc
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare
+        id: prepare
+        run: |
+          if [ ! -e "${DISTRO}/${CODENAME}/Dockerfile" ]; then
+            ./versions.sh "${DISTRO}/${CODENAME}"
+            ./apply-templates.sh "${DISTRO}/${CODENAME}"
+          fi
+
+          platforms="$(echo '${{ matrix.architectures }}' |
+              jq -r 'map(.platform)|join(",")')"
+
+          echo "platforms=${platforms}" | tee -a "${GITHUB_OUTPUT}"
+
+      - name: Free Disk Space (Ubuntu)
+        if: false
+        uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          docker-images: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: true
+
+      - name: Setup containerd image store
+        run: |
+          echo "::group::docker daemon config"
+          { cat /etc/docker/daemon.json || echo '{}'; } | \
+              jq '. | .+{"features": {"containerd-snapshotter": true, "buildkit": true}}' | \
+              sudo tee /etc/docker/daemon.json.new
+          sudo mv /etc/docker/daemon.json.new /etc/docker/daemon.json
+          echo "::endgroup::"
+
+          sudo systemctl restart docker
+
+          echo "::group::docker driver status"
+          docker info -f '{{ .DriverStatus }}'
+          echo "::endgroup::"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          # While we're running docker daemon with containerd-snapshotter, the
+          # built containers exported in 'load' output from build-and-push
+          # action are not visible to a following build session using a
+          # non-default builder. Don't switch to the newly created build here to
+          # work-around this issue.
+          #
+          # See https://github.com/moby/buildkit/issues/2343
+          use: false
+          version: v0.20.1
+
+      - name: Login to Docker Hub
+        if: ${{ github.ref_name == 'main' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker meta for curl images
+        id: meta-curl
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REPOSITORY }}
+          tags: |
+            ${{ matrix.codename }}-curl
+            ${{ matrix.suite && format('{0}-curl', matrix.suite) || '' }}
+            ${{ matrix.suite == 'stable' && 'latest-curl' || '' }}
+          flavor: |
+            latest=false
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+
+      - name: Build curl images
+        id: build-curl
+        uses: docker/build-push-action@v5
+        with:
+          annotations: ${{ contains(steps.prepare.outputs.platforms, ',') && steps.meta-curl.outputs.annotations || '' }}
+          build-args: |
+            BASEIMAGE=${{ format('vicamo/{0}:{1}', matrix.distribution, matrix.codename) }}
+          context: ${{ format('{0}/{1}/curl', matrix.distribution, matrix.codename) }}
+          labels: ${{ steps.meta-curl.outputs.labels }}
+          load: true
+          platforms: ${{ steps.prepare.outputs.platforms }}
+          provenance: false
+          pull: false
+          tags: ${{ steps.meta-curl.outputs.tags }}
+
+      - name: Docker meta for scm images
+        id: meta-scm
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REPOSITORY }}
+          tags: |
+            ${{ matrix.codename }}-scm
+            ${{ matrix.suite && format('{0}-scm', matrix.suite) || '' }}
+            ${{ matrix.suite == 'stable' && 'latest-scm' || '' }}
+          flavor: |
+            latest=false
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+
+      - name: Build scm images
+        id: build-scm
+        uses: docker/build-push-action@v5
+        with:
+          annotations: ${{ contains(steps.prepare.outputs.platforms, ',') && steps.meta-scm.outputs.annotations || '' }}
+          build-args: |
+            BASEIMAGE=${{ format('{0}:{1}-curl', env.REPOSITORY, matrix.codename) }}
+          context: ${{ format('{0}/{1}/scm', matrix.distribution, matrix.codename) }}
+          labels: ${{ steps.meta-scm.outputs.labels }}
+          load: true
+          platforms: ${{ steps.prepare.outputs.platforms }}
+          provenance: false
+          pull: false
+          tags: ${{ steps.meta-scm.outputs.tags }}
+
+      - name: Docker meta for buildpack-deps images
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REPOSITORY }}
+          tags: |
+            ${{ matrix.codename }}
+            ${{ matrix.suite && format('{0}', matrix.suite) || '' }}
+          flavor: |
+            latest=${{ matrix.suite == 'stable' && 'true' || 'false' }}
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+
+      - name: Build buildpack-deps images
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          annotations: ${{ contains(steps.prepare.outputs.platforms, ',') && steps.meta.outputs.annotations || '' }}
+          build-args: |
+            BASEIMAGE=${{ format('{0}:{1}-scm', env.REPOSITORY, matrix.codename) }}
+          context: ${{ format('{0}/{1}', matrix.distribution, matrix.codename) }}
+          labels: ${{ steps.meta.outputs.labels }}
+          load: true
+          platforms: ${{ steps.prepare.outputs.platforms }}
+          provenance: false
+          pull: false
+          tags: ${{ steps.meta.outputs.tags }}
