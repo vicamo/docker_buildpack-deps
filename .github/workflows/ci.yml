@@ -280,17 +280,23 @@ jobs:
       - name: Set up QEMU (docker/setup-qemu-action)
         uses: docker/setup-qemu-action@v3
         with:
-          image: tonistiigi/binfmt:qemu-v9.2.0
+          image: vicamo/binfmt:latest
 
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Apply templates
+      - name: Prepare
+        id: prepare
         run: |
           if [ ! -e "${DISTRO}/${CODENAME}/Dockerfile" ]; then
             ./versions.sh "${DISTRO}/${CODENAME}"
             ./apply-templates.sh "${DISTRO}/${CODENAME}"
           fi
+
+          platforms="$(echo '${{ matrix.architectures }}' |
+              jq -r 'map(.platform)|join(",")')"
+
+          echo "platforms=${platforms}" | tee -a "${GITHUB_OUTPUT}"
 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -336,20 +342,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Prepare
-        id: prepare
-        run: |
-          set -x
-          builder_platforms_json="[$(docker buildx inspect|grep ^Platforms:|cut -d: -f2|tr -d \*|sed 's/\([^ ,]\+\)/"\1"/g')]"
-          architectures_json="$(echo '${{ matrix.architectures }}' |
-              jq -c -M 'map(select(.platform as $c |
-                                   '"${builder_platforms_json}"' |
-                                   index($c) != null)
-                       )')"
-          platforms="$(echo "${architectures_json}" | jq -r 'map(.platform)|join(",")')"
-
-          echo "platforms=${platforms}" | tee -a "${GITHUB_OUTPUT}"
 
       - name: Docker meta for curl images
         id: meta-curl
